@@ -127,15 +127,11 @@ header p {
     background-color: var(--verde-claro);
 }
 
-.recomendados h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #2c6e49;
-}
+
 .recomendados h2, .valorados h2 {
   font-size: 2rem;
   margin-bottom: 2rem;
-  color: var(--verde);
+  color: var(--azul-mar);
 }
 
 .tarjeta.especial {
