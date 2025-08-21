@@ -1,0 +1,169 @@
+:root {
+  --verde: #4CAF50;
+  --azul-mar: #0077B6;
+  --arena: #F4EBD0;
+  --blanco: #ffffff;
+  --gris-suave: #f9f9f9;
+  --verde-claro:rgb(232, 248, 223);
+  --amarillo-claro:rgb(245, 244, 205);
+
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--gris-suave);
+  color: #333;
+}
+
+header {
+  background-image: url('../image/teide.png'); /* Reemplaza con tu imagen */
+  background-size: cover;
+  background-position: center;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--blanco);
+  text-align: center;
+}
+
+header h1 {
+  font-size: 3rem;
+  margin: 0;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+}
+
+header p {
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+.btn-whatsapp {
+  margin-top: 2rem;
+  background-color: #25D366;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.categorias {
+  padding: 3rem 2rem;
+  background-color: var(--blanco);
+  text-align: center;
+}
+
+.categorias h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--azul-mar);
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 2rem;
+}
+
+.tarjeta {
+  background-color: var(--arena);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.tarjeta:hover {
+  transform: scale(1.03);
+}
+
+.tarjeta .contenido {
+  padding: 0.5rem; /* Menos espacio alrededor del texto */
+}
+
+.tarjeta img {
+  width: 100%;
+  aspect-ratio: 4 / 5; /* Imagen más vertical */
+  object-fit: cover;
+}
+
+.tarjeta h3 {
+    font-size: 1rem;
+  margin: 0.5rem;
+  color: var(--azul-mar);
+}
+
+.tarjeta p {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.tarjeta a {
+  display: inline-block;
+  background-color: var(--verde);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.recomendados, .valorados {
+  padding: 3rem 2rem;
+  background-color: var(--gris-suave);
+  text-align: center;
+}
+
+.recomendados {
+   background-color: var(--amarillo-claro);
+}
+.valorados {
+    background-color: var(--verde-claro);
+
+
+.recomendados h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #2c6e49;
+}
+.recomendados h2, .valorados h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: var(--verde);
+}
+
+.tarjeta.especial {
+  border: 2px solid gold;
+  background-color: #fffbe6;
+}
+
+.tarjeta.valorada {
+  border: 2px solid crimson;
+  background-color: #ffe6e6;
+}
+/*precio y descuento*/
+.precio {
+  margin: 0.5rem 0 1rem;
+  font-size: 1.1rem;
+}
+
+.precio .original {
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 0.5rem;
+}
+
+.precio .descuento {
+  color: #e63946;
+  font-weight: bold;
+  background-color: #ffe6e6;
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+}
+
