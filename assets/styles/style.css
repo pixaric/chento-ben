@@ -121,11 +121,11 @@ header p {
 }
 
 .recomendados {
-   background-color: var(--amarillo-claro);
+   background-color: var(--azul-claro);
 }
 .valorados {
     background-color: var(--verde-claro);
-
+}
 
 .recomendados h2 {
   font-size: 2rem;
@@ -139,12 +139,12 @@ header p {
 }
 
 .tarjeta.especial {
-  border: 2px solid gold;
+  border: 2px solid blue;
   background-color: #fffbe6;
 }
 
 .tarjeta.valorada {
-  border: 2px solid crimson;
+  border: 2px solid green;
   background-color: #ffe6e6;
 }
 /*precio y descuento*/
