@@ -1,0 +1,38 @@
+/* Estructura general */
+header,
+section,
+footer {
+width: 100%;
+}
+
+/* Contenedor central */
+.contenedor {
+max-width: 1200px;
+margin: 0 auto;
+padding: 0 2rem;
+box-sizing: border-box;
+}
+
+/* Cabecera */
+header {
+background-image: url('../image/teide.png');
+background-size: cover;
+background-position: center;
+color: white;
+text-align: center;
+padding: 5rem 2rem;
+}
+
+/* Secciones */
+section {
+padding: 4rem 0;
+}
+
+/* Footer */
+footer {
+background-color: var(--gris-suave);
+text-align: center;
+padding: 2rem 0;
+font-size: 0.9rem;
+color: #555;
+}

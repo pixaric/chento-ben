@@ -1,0 +1,81 @@
+/* Botón de WhatsApp */
+.btn-whatsapp {
+background-color: #25D366;
+color: white;
+padding: 0.8rem 1.5rem;
+border-radius: 25px;
+text-decoration: none;
+font-weight: bold;
+font-size: 1rem;
+display: inline-block;
+transition: background-color 0.3s ease;
+}
+
+.btn-whatsapp:hover {
+background-color: #1ebe5d;
+}
+
+/* Títulos de sección */
+section h2 {
+font-size: 2rem;
+margin-bottom: 2rem;
+color: var(--azul-mar);
+text-align: center;
+}
+
+/* Tarjetas */
+.tarjetas {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 1.5rem;
+}
+
+.tarjeta {
+background-color: white;
+border-radius: 10px;
+overflow: hidden;
+box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+min-height: 320px;
+transition: transform 0.3s ease;
+}
+
+.tarjeta:hover {
+transform: scale(1.03);
+}
+
+.tarjeta img {
+width: 100%;
+aspect-ratio: 4 / 5;
+object-fit: cover;
+}
+
+.tarjeta .contenido {
+padding: 0.5rem;
+flex-grow: 1;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+/* Precio */
+.precio {
+margin: 0.5rem 0;
+font-size: 1rem;
+}
+
+.precio .original {
+text-decoration: line-through;
+color: #888;
+margin-right: 0.5rem;
+}
+
+.precio .descuento {
+color: #e63946;
+font-weight: bold;
+background-color: var(--rojo-suave);
+padding: 0.2rem 0.5rem;
+border-radius: 5px;
+}

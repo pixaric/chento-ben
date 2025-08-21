@@ -4,300 +4,62 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Chento-Ben | Excursiones con alma</title>
+
+  <!-- Tipografía -->
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/styles/style.css">
+
+  <!-- Estilos divididos -->
+  <link rel="stylesheet" href="assets/styles/base.css">
+  <link rel="stylesheet" href="assets/styles/components.css">
+  <link rel="stylesheet" href="assets/styles/responsive.css">
 </head>
 <body>
 
+  <!-- 🟢 Cabecera -->
   <header>
-    <h1>Chento-Ben</h1>
-    <p>Explora, siente, vive. Excursiones con alma.</p>
-    <a href="https://wa.me/tu-numero" class="btn-whatsapp">Whatsapp por WhatsApp</a>
+    <div class="contenedor">
+      <h1>Chento-Ben</h1>
+      <p>Explora, siente, vive. Excursiones con alma.</p>
+      <a href="https://wa.me/tu-numero" class="btn-whatsapp">Whatsapp por WhatsApp</a>
+    </div>
   </header>
 
-<!--RECOMENDADOS-->
+  <!-- 🟡 Sección de categorías -->
+  <section class="categorias">
+    <div class="contenedor">
+      <h2>Categorías de Excursiones</h2>
+      <!-- Aquí irán las tarjetas por categoría -->
+    </div>
+  </section>
+
+  <!-- 🔵 Sección de recomendados -->
   <section class="recomendados">
     <div class="contenedor">
-  <h2>🌟 RECOMENDADOS</h2>
-  <div class="tarjetas">
-    <div class="tarjeta especial">
-      <img src="assets/image/barco/1.jpg" alt="Jet Sky Aventura">
-      <div class="contenido">
-        <h3>Jet Sky Aventura</h3>
-        <p>Velocidad y adrenalina en aguas turquesas. ¡Una experiencia inolvidable!</p>
-        <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-        <a href="https://wa.me/tu-numero">Whatsapp</a>
+      <h2>🌟 Más recomendados</h2>
+      <div class="tarjetas">
+        <!-- Tarjetas recomendadas -->
       </div>
     </div>
-    <div class="tarjeta especial">
-      <img src="assets/image/barco/1.jpg" alt="Jet Sky Aventura">
-      <div class="contenido">
-        <h3>Jet Sky Aventura</h3>
-        <p>Velocidad y adrenalina en aguas turquesas. ¡Una experiencia inolvidable!</p>
-        <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-        <a href="https://wa.me/tu-numero">Whatsapp</a>
+  </section>
+
+  <!-- 🔴 Sección de valorados -->
+  <section class="valorados">
+    <div class="contenedor">
+      <h2>❤️ Más valorados</h2>
+      <div class="tarjetas">
+        <!-- Tarjetas valoradas -->
       </div>
     </div>
-    <!-- Más tarjetas recomendadas -->
-  </div>
-  </div>
-</section>
+  </section>
 
-
-<!--VALORADOS-->
-<section class="valorados">
-  <div class="contenedor">
-  <h2>❤️ VALORADOS</h2>
-  <div class="tarjetas">
-    <div class="tarjeta valorada">
-      <img src="assets/image/barco/2.jpg" alt="Ruta Buggy Volcánica">
-      <div class="contenido">
-        <h3>Ruta Buggy Volcánica</h3>
-        <p>Explora paisajes únicos con la excursión mejor valorada por nuestros clientes.</p>
-        <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-        <a href="https://wa.me/tu-numero">Whatsapp</a>
-      </div>
+  <!-- ⚫ Footer -->
+  <footer>
+    <div class="contenedor">
+      <p>&copy; 2025 Chento-Ben. Todos los derechos reservados.</p>
     </div>
-    <div class="tarjeta valorada">
-      <img src="assets/image/barco/2.jpg" alt="Ruta Buggy Volcánica">
-      <div class="contenido">
-        <h3>Ruta Buggy Volcánica</h3>
-        <p>Explora paisajes únicos con la excursión mejor valorada por nuestros clientes.</p>
-        <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-        <a href="https://wa.me/tu-numero">Whatsapp</a>
-      </div>
-    </div>
-    <!-- Más tarjetas valoradas -->
-  </div>
-  </div>
-</section>
+  </footer>
 
-<!-- CATEGORIAS -->
-
-<section class="categorias">
-  <h2>Categorías de Excursiones</h2>
-
-  <!-- 🚤 Excursiones en barco -->
-  <div class="categoria">
-    <h3>🚤 Excursiones en barco</h3>
-    <p>Descubre la costa en paseos guiados con paradas para nadar y relajarte.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-  <img src="assets/image/barco/bella_mar.jpg" alt="Barco Costa Sur">
-  <div class="contenido">
-    <h3>Barco Costa Sur</h3>
-    <p>Recorrido por playas escondidas y cuevas marinas.</p>
-    <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-    <a href="https://wa.me/tu-numero">Whatsapp</a>
-  </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/2.jpg" alt="Atardecer en barco">
-        <div class="contenido">
-          <h3>Atardecer en barco</h3>
-          <p>Navega al atardecer con música y copa incluida.</p>
-          <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <p class="precio">
-      <span class="original">€60</span>
-      <span class="descuento">€45</span>
-    </p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="assets/image/barco/1.jpg" alt="Barco Costa Sur">
-        <div class="contenido">
-          <h3>Barco Costa Sur</h3>
-          <p>Recorrido por playas escondidas y cuevas marinas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ⛵ Barco rental velero -->
-  <div class="categoria">
-    <h3>⛵ Barco rental velero</h3>
-    <p>Alquila un velero para navegar libremente con o sin patrón.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <img src="img/velero1.jpg" alt="Velero privado">
-        <div class="contenido">
-          <h3>Velero privado</h3>
-          <p>Disfruta de un día exclusivo en alta mar.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="img/velero2.jpg" alt="Velero romántico">
-        <div class="contenido">
-          <h3>Velero romántico</h3>
-          <p>Ideal para parejas, con cena a bordo y vistas únicas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🌊 Jet Sky -->
-  <div class="categoria">
-    <h3>🌊 Jet Sky</h3>
-    <p>Vive la adrenalina sobre el agua con motos acuáticas.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <img src="img/jetsky1.jpg" alt="Jet Sky Express">
-        <div class="contenido">
-          <h3>Jet Sky Express</h3>
-          <p>Ruta rápida por la costa con giros y saltos.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="img/jetsky2.jpg" alt="Jet Sky Safari">
-        <div class="contenido">
-          <h3>Jet Sky Safari</h3>
-          <p>Excursión guiada con paradas en puntos naturales.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🛥️ Jet Cor -->
-  <div class="categoria">
-    <h3>🛥️ Jet Cor</h3>
-    <p>Experiencia premium en lanchas rápidas por zonas exclusivas.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <img src="img/jetcor1.jpg" alt="Jet Cor Deluxe">
-        <div class="contenido">
-          <h3>Jet Cor Deluxe</h3>
-          <p>Lancha de lujo con música, bebidas y guía privado.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="img/jetcor2.jpg" alt="Jet Cor Tour">
-        <div class="contenido">
-          <h3>Jet Cor Tour</h3>
-          <p>Recorrido por acantilados y zonas protegidas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🏎️ Buggy -->
-  <div class="categoria">
-    <h3>🏎️ Buggy</h3>
-    <p>Explora caminos rurales y paisajes volcánicos en buggy.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <img src="img/buggy1.jpg" alt="Buggy Volcánico">
-        <div class="contenido">
-          <h3>Buggy Volcánico</h3>
-          <p>Ruta por senderos de lava y miradores naturales.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="img/buggy2.jpg" alt="Buggy Safari">
-        <div class="contenido">
-          <h3>Buggy Safari</h3>
-          <p>Excursión por zonas rurales con paradas fotográficas.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 🛴 Movilyti -->
-  <div class="categoria">
-    <h3>🛴 Movilyti</h3>
-    <p>Recorre la ciudad o la costa en scooters eléctricos y ecológicos.</p>
-    <div class="tarjetas">
-      <div class="tarjeta">
-        <img src="img/movilyti1.jpg" alt="Tour urbano Movilyti">
-        <div class="contenido">
-          <h3>Tour urbano Movilyti</h3>
-          <p>Ruta por puntos históricos y culturales en scooter.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-      <div class="tarjeta">
-        <img src="img/movilyti2.jpg" alt="Movilyti costero">
-        <div class="contenido">
-          <h3>Movilyti costero</h3>
-          <p>Paseo relajado por el paseo marítimo y miradores.</p>
-          <a href="https://wa.me/tu-numero">Whatsapp</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</section>
-
+  <!-- Scripts -->
+  <script src="assets/scripts/main.js" defer></script>
 </body>
 </html>
