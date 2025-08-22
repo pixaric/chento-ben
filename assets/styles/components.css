@@ -109,6 +109,7 @@ section h2 {
   position: relative;
   left: 50%;
   transform: translateX(-50%);
+  margin-bottom: 2rem;
 }
 
 .btn-whatsapp {
@@ -121,11 +122,13 @@ section h2 {
   text-decoration: none;
   font-weight: bold;
   font-size: 1rem;
-  display: block;
+  white-space: nowrap;
+  display: inline-block;
   transition: background-color 0.3s ease, transform 0.2s ease;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   align-self: center;
 }
+
 
 .btn-whatsapp:hover {
   background-color: #1ebe5d;
