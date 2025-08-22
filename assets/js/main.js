@@ -4,27 +4,7 @@ function activarCarruseles() {
     const tarjetas = carrusel.querySelectorAll('.tarjeta');
     let intervalo;
 
-    // === Autoplay infinito ===
-    function iniciarAutoplay() {
-      intervalo = setInterval(() => {
-        const maxScroll = carrusel.scrollWidth - carrusel.clientWidth;
-        const currentScroll = carrusel.scrollLeft;
-
-        if (currentScroll >= maxScroll - 10) {
-          carrusel.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          carrusel.scrollBy({ left: 300, behavior: 'smooth' });
-        }
-      }, 4000);
-    }
-
-    iniciarAutoplay();
-
-    // === Pausar autoplay al tocar una tarjeta ===
-    tarjetas.forEach(tarjeta => {
-      tarjeta.addEventListener('click', () => clearInterval(intervalo));
-    });
-
+    
     // === Detectar tarjeta centrada y aplicar clase activa ===
     carrusel.addEventListener('scroll', () => {
       let centro = carrusel.scrollLeft + carrusel.clientWidth / 2;
@@ -37,11 +17,6 @@ function activarCarruseles() {
       });
     });
 
-    // === Reactivar autoplay al salir de la tarjeta activa ===
-    carrusel.addEventListener('scrollend', () => {
-      if (!carrusel.querySelector('.tarjeta.activa')) {
-        iniciarAutoplay();
-      }
-    });
+    
   });
 }
