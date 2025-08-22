@@ -69,3 +69,15 @@ margin: 0;
 }
 
 }
+
+@media screen and (max-width: 600px) {
+  .tarjeta {
+    width: 85%;
+  }
+
+  .carrusel {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+

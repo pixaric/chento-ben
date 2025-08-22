@@ -209,6 +209,22 @@
     });
 </script>
 
+<div id="seccion-velero"></div>
+
+<div id="seccion-velero"></div>
+
+<script>
+  fetch('sections/velero.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-velero').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
+
+
+
 
     <!--  Footer -->
     <footer>
@@ -229,6 +245,6 @@
 
 
     <!-- Scripts -->
-    <script src="assets/scripts/main.js" defer></script>
+    <script src="assets/js/main.js" ></script>
   </body>
 </html>

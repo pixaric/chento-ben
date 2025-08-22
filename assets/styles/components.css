@@ -1,123 +1,121 @@
-/*.tarjetas {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 columnas iguales
-  gap:2 rem;
-}
-
-.t1{
-    grid-column: 3/span 1;
-}
-.t2{
-    grid-column: 4/span 1;
-}
-*/
+/* === Tarjetas en cuadrícula (modo no carrusel) === */
 .tarjetas {
   display: flex;
-  flex-wrap: wrap;               
-  justify-content: center;     
-  gap: 2rem;                   
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
 }
 
+/* === Tarjeta base === */
 .tarjeta {
-  max-width: 260px;         /* Tamaño máximo por tarjeta */
-  min-height: 320px;        /* Altura mínima para mantener proporción */
-  margin: 0 auto;           /* Centra la tarjeta si hay espacio */
+  max-width: 260px;
+  min-height: 320px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: white;
+  
+  background: linear-gradient(to bottom, rgba(0, 195, 255, 0.8), rgba(220, 237, 245, 0.9));
+
+
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   transition: transform 0.3s ease;
-  ;
-  background-color: var(--dorado);
 }
 
 .tarjeta:hover {
-transform: scale(1.03);
+  transform: scale(1.03);
 }
 
+/* === Imagen dentro de tarjeta === */
 .tarjeta img {
-width: 100%;
-aspect-ratio: 4 / 5;
-object-fit: cover;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
+/* === Contenido dentro de tarjeta === */
 .tarjeta .contenido {
-padding: 0.5rem;
-flex-grow: 1;
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-align-items: center;
+  padding: 0.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .tarjeta h3 {
-font-size: 1.1rem;
-margin-bottom: 0.5rem;
-color: var(--azul-mar);
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--azul-mar);
 }
 
 .tarjeta p {
-font-size: 0.9rem;
-margin-bottom: 0.5rem;
-color: #555;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #555;
 }
 
+/* === Precio y descuentos === */
 .precio {
-font-size: 1rem;
-margin-bottom: 1rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
 }
 
 .precio .original {
-text-decoration: line-through;
-color: #888;
-margin-right: 0.5rem;
+  text-decoration: line-through;
+  color: #888;
+  margin-right: 0.5rem;
 }
 
 .precio .descuento {
-color: #e63946;
-font-weight: bold;
-background-color: var(--rojo-suave);
-padding: 0.2rem 0.5rem;
-border-radius: 5px;
+  color: #e63946;
+  font-weight: bold;
+  background-color: var(--rojo-suave);
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
 }
 
+/* === Botón dentro de tarjeta === */
 .tarjeta a {
-align-self: flex-start;
-background-color: var(--whatsapp);
-color: white;
-padding: 0.6rem 1rem;
-border-radius: 20px;
-text-decoration: none;
-font-size: 0.9rem;
-font-weight: bold;
-transition: background-color 0.3s ease;
+  align-self: flex-start;
+  background-color: var(--whatsapp);
+  color: white;
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .tarjeta a:hover {
-background-color: #1f5c3f;
+  background-color: #1f5c3f;
 }
+
+/* === Encabezado de sección === */
 section h2 {
-  background-color: #0077b6; /* El color que prefieras */
+  background-color: #0077b6;
   color: white;
   text-align: center;
   padding: 1rem 0;
   margin: 0;
-  width: 100vw; /* Ocupa todo el ancho de la ventana */
+  width: 100vw;
   position: relative;
   left: 50%;
   transform: translateX(-50%);
   margin-bottom: 2rem;
 }
 
+/* === Botón flotante de WhatsApp === */
 .btn-whatsapp {
-  background-color: var(--whatsapp);  /* Color oficial de WhatsApp */
+  background-color: var(--whatsapp);
   color: white;
   padding: 0.8rem 1.5rem;
-  margin: 0 auto;
-  margin-bottom: 0.8rem;
+  margin: 0 auto 0.8rem;
   border-radius: 25px;
   text-decoration: none;
   font-weight: bold;
@@ -128,7 +126,6 @@ section h2 {
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   align-self: center;
 }
-
 
 .btn-whatsapp:hover {
   background-color: #1ebe5d;
@@ -160,8 +157,60 @@ section h2 {
   height: 40px;
 }
 
+/* === Carrusel horizontal === */
+.carrusel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding: 2rem 0;
+}
 
+.carrusel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
 
+/* === Tarjetas en carrusel (heredan base pero se adaptan) === */
+.carrusel .tarjeta {
+  flex: 0 0 auto;
+  scroll-snap-align: center;
+  width: 80%;
+  max-width: 300px;
+}
 
+/* === Flechas de navegación (solo escritorio) === */
+.flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #25D366;
+  color: white;
+  border: none;
+  font-size: 2rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+  transition: background 0.3s ease;
+}
 
+.flecha.izquierda {
+  left: 10px;
+}
 
+.flecha.derecha {
+  right: 10px;
+}
+
+/* === Responsive: Ocultar flechas en pantallas pequeñas === */
+@media screen and (max-width: 768px) {
+  .flecha {
+    display: none;
+  }
+}
