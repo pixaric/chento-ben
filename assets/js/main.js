@@ -5,7 +5,6 @@ function activarCarruseles() {
 
     if (!carrusel || tarjetas.length === 0) return;
 
-    // Detectar la tarjeta más cercana al centro de la pantalla
     function detectarTarjetaActiva() {
       const centroPantalla = window.innerWidth / 2;
 
@@ -18,12 +17,7 @@ function activarCarruseles() {
       });
     }
 
-    // Activar detección al hacer scroll
-    carrusel.addEventListener('scroll', () => {
-      detectarTarjetaActiva();
-    });
-
-    // Activar detección al cargar y al redimensionar
+    carrusel.addEventListener('scroll', detectarTarjetaActiva);
     window.addEventListener('load', detectarTarjetaActiva);
     window.addEventListener('resize', detectarTarjetaActiva);
   });
