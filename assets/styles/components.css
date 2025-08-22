@@ -173,7 +173,7 @@ section h2 {
   display: flex;
   align-items: center;
   overflow: hidden;
-  padding: 2rem 0;
+  padding: 0 0;
 }
 
 .carrusel {
@@ -184,7 +184,7 @@ section h2 {
   scroll-snap-type: x mandatory;
   padding-top: 3rem;
   padding-bottom: 3rem;
-   min-height: 60px; /* Altura base para tarjetas normales */
+   min-height: 30px; /* Altura base para tarjetas normales */
   
 }
 
@@ -197,7 +197,7 @@ section h2 {
 .carrusel .tarjeta {
   flex: 0 0 auto;
   scroll-snap-align: center;
-  width: 80%;
+  width: 50%;
   max-width: 300px;
 }
 
