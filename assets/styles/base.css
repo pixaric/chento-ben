@@ -1,11 +1,11 @@
->* Reset básico *>
+/* Reset básico */
 * {
 margin: 0;
 padding: 0;
 box-sizing: border-box;
 }
 
->* Tipografía general *>
+/* Tipografía general */
 body {
 font-family: 'Quicksand', sans-serif;
 font-size: 16px;
@@ -14,7 +14,7 @@ color: #333;
 background-color: #f9f9f9;
 }
 
->* Variables de color *>
+/* Variables de color */
 :root {
 --azul-mar: #0077b6;
 --azul-claro: #e0f7fa;

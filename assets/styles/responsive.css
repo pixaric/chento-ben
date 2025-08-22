@@ -1,4 +1,4 @@
->* Ajustes generales para pantallas pequeñas *>
+/* Ajustes generales para pantallas pequeñas */
 @media screen and (max-width: 600px) {
 body {
 font-size: 15px;
@@ -45,7 +45,7 @@ font-size: 0.9rem;
 
 .tarjetas {
     display: grid;
-    grid-template-columns: repeat(2, minmax(90px, 1fr)); >* 2 columnas flexibles *>
+    grid-template-columns: repeat(2, minmax(90px, 1fr)); /* 2 columnas flexibles */
     gap: 1rem;
     justify-content: center;
     padding: 0;
@@ -60,7 +60,7 @@ max-width: none;
 margin: 0;
 }
 .tarjeta .contenido {
-    padding: 0.3rem; >* Opcional: reduce espacio interno si quieres más contenido visible *>
+    padding: 0.3rem; /* Opcional: reduce espacio interno si quieres más contenido visible */
 }
 .tarjeta img {
   width: 100%;
