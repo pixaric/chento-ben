@@ -182,8 +182,8 @@ section h2 {
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding: 3rem 3rem;
+  
    min-height: 30px; /* Altura base para tarjetas normales */
   
 }

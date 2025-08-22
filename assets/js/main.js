@@ -2,21 +2,29 @@ function activarCarruseles() {
   document.querySelectorAll('.carrusel-container').forEach(container => {
     const carrusel = container.querySelector('.carrusel');
     const tarjetas = carrusel.querySelectorAll('.tarjeta');
-    let intervalo;
 
-    
-    // === Detectar tarjeta centrada y aplicar clase activa ===
-    carrusel.addEventListener('scroll', () => {
-      let centro = carrusel.scrollLeft + carrusel.clientWidth / 2;
+    if (!carrusel || tarjetas.length === 0) return;
+
+    // Detectar la tarjeta más cercana al centro de la pantalla
+    function detectarTarjetaActiva() {
+      const centroPantalla = window.innerWidth / 2;
 
       tarjetas.forEach(tarjeta => {
         const rect = tarjeta.getBoundingClientRect();
         const tarjetaCentro = rect.left + rect.width / 2;
+        const distancia = Math.abs(tarjetaCentro - centroPantalla);
 
-        tarjeta.classList.toggle('activa', Math.abs(tarjetaCentro - window.innerWidth / 2) < rect.width / 2);
+        tarjeta.classList.toggle('activa', distancia < rect.width / 2);
       });
+    }
+
+    // Activar detección al hacer scroll
+    carrusel.addEventListener('scroll', () => {
+      detectarTarjetaActiva();
     });
 
-    
+    // Activar detección al cargar y al redimensionar
+    window.addEventListener('load', detectarTarjetaActiva);
+    window.addEventListener('resize', detectarTarjetaActiva);
   });
 }
