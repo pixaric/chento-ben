@@ -208,14 +208,21 @@
 </script>
 
 <div id="seccion-velero"></div>
-
-
-
 <script>
   fetch('sections/velero.html')
     .then(res => res.text())
     .then(html => {
       document.getElementById('seccion-velero').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
+<div id="seccion-jetsky"></div>
+<script>
+  fetch('sections/jetsky.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-jetsky').innerHTML = html;
       activarCarruseles(); // ¡Activa el carrusel una vez insertado!
     });
 </script>

@@ -35,15 +35,6 @@ scroll-snap-align: center;
 
 
 
-
-.carrusel::before,
-.carrusel::after {
-  content: "";
-  flex: 0 0 auto;
-  width: calc((100vw - 300px) / 2); /* ajusta según el ancho de tus tarjetas */
-}
-
-
 /* === Imagen dentro de tarjeta === */
 .tarjeta img {
   width: 100%;

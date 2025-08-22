@@ -81,3 +81,33 @@ margin: 0;
   }
 }
 
+
+/* Espacios laterales solo en pantallas pequeñas */
+@media screen and (max-width: 768px) {
+  .carrusel::before,
+  .carrusel::after {
+    content: "";
+    flex: 0 0 auto;
+    width: 5vw;
+  }
+}
+
+/* En escritorio, eliminamos los espacios */
+@media screen and (min-width: 769px) {
+  .carrusel::before,
+  .carrusel::after {
+    content: none;
+    width: 0;
+  }
+}
+
+
+/* En pantallas grandes, desactivamos el zoom */
+@media screen and (min-width: 769px) {
+  .tarjeta.activa {
+    transform: scale(1);
+    width: 65vw;
+    max-width: 300px;
+    z-index: 1;
+  }
+}
