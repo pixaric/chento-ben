@@ -8,7 +8,7 @@
 
 /* === Tarjeta base === */
 .tarjeta {
-  max-width: 260px;
+  max-width: 300px;
   min-height: 120px;
   margin: 0 auto;
   display: flex;
@@ -27,7 +27,7 @@ width: 80%;
 }
 
 .tarjeta.activa {
-  transform: scale(1.15);
+  transform: scale(1.25);
   box-shadow: 0 12px 24px rgba(0,0,0,0.2);
   transition: transform 2s ease, box-shadow 2s ease;
   z-index: 2;
@@ -37,6 +37,14 @@ width: 80%;
 .tarjeta:hover {
   transform: scale(1.03);
 }
+
+.carrusel::before,
+.carrusel::after {
+  content: "";
+  flex: 0 0 auto;
+  width: calc((100vw - 300px) / 2); /* ajusta según el ancho de tus tarjetas */
+}
+
 
 /* === Imagen dentro de tarjeta === */
 .tarjeta img {
@@ -111,7 +119,7 @@ section h2 {
   background-color: #0077b6;
   color: white;
   text-align: center;
-  padding: 1rem 0;
+  padding: 0.1rem 0;
   margin: 0;
   width: 100vw;
   position: relative;
@@ -183,6 +191,7 @@ section h2 {
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
   padding: 3rem 3rem;
+  
   
    min-height: 30px; /* Altura base para tarjetas normales */
   
