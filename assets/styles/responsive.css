@@ -26,15 +26,6 @@ font-size: 1.5rem;
 margin-bottom: 0.1rem;
 }
 
-.tarjetas {
-grid-template-columns: 1fr;
-gap: 1rem;
-}
-
-.tarjeta {
-min-height: 280px;
-}
-
 .tarjeta h3 {
 font-size: 0.95rem;
 }
@@ -51,4 +42,29 @@ padding: 0.4rem 0.8rem;
 .precio {
 font-size: 0.9rem;
 }
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(90px, 1fr)); /* 2 columnas flexibles */
+    gap: 1rem;
+    justify-content: center;
+    padding: 0 ;
+    margin: 0;
+  }
+
+
+.tarjeta {
+width: 100%;
+max-width: none;
+margin: 0;
+}
+.tarjeta .contenido {
+    padding: 0.3rem; /* Opcional: reduce espacio interno si quieres más contenido visible */
+}
+.tarjeta img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
 }
