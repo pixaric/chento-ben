@@ -1,44 +1,11 @@
 function activarCarruseles() {
   document.querySelectorAll('.carrusel-container').forEach(container => {
     const carrusel = container.querySelector('.carrusel');
-    const izquierda = container.querySelector('.flecha.izquierda');
-    const derecha = container.querySelector('.flecha.derecha');
-
-    if (!carrusel) return;
-
-    // === Navegación con flechas (solo si existen) ===
-    if (izquierda && derecha) {
-      izquierda.addEventListener('click', () => {
-        carrusel.scrollBy({ left: -300, behavior: 'smooth' });
-      });
-
-      derecha.addEventListener('click', () => {
-        const maxScroll = carrusel.scrollWidth - carrusel.clientWidth;
-        const currentScroll = carrusel.scrollLeft;
-
-        if (currentScroll >= maxScroll - 10) {
-          carrusel.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          carrusel.scrollBy({ left: 300, behavior: 'smooth' });
-        }
-      });
-    }
+    const tarjetas = carrusel.querySelectorAll('.tarjeta');
+    let intervalo;
 
     // === Autoplay infinito ===
-    let intervalo = setInterval(() => {
-      const maxScroll = carrusel.scrollWidth - carrusel.clientWidth;
-      const currentScroll = carrusel.scrollLeft;
-
-      if (currentScroll >= maxScroll - 10) {
-        carrusel.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        carrusel.scrollBy({ left: 300, behavior: 'smooth' });
-      }
-    }, 4000);
-
-    // === Pausar autoplay al pasar el cursor ===
-    carrusel.addEventListener('mouseenter', () => clearInterval(intervalo));
-    carrusel.addEventListener('mouseleave', () => {
+    function iniciarAutoplay() {
       intervalo = setInterval(() => {
         const maxScroll = carrusel.scrollWidth - carrusel.clientWidth;
         const currentScroll = carrusel.scrollLeft;
@@ -49,6 +16,32 @@ function activarCarruseles() {
           carrusel.scrollBy({ left: 300, behavior: 'smooth' });
         }
       }, 4000);
+    }
+
+    iniciarAutoplay();
+
+    // === Pausar autoplay al tocar una tarjeta ===
+    tarjetas.forEach(tarjeta => {
+      tarjeta.addEventListener('click', () => clearInterval(intervalo));
+    });
+
+    // === Detectar tarjeta centrada y aplicar clase activa ===
+    carrusel.addEventListener('scroll', () => {
+      let centro = carrusel.scrollLeft + carrusel.clientWidth / 2;
+
+      tarjetas.forEach(tarjeta => {
+        const rect = tarjeta.getBoundingClientRect();
+        const tarjetaCentro = rect.left + rect.width / 2;
+
+        tarjeta.classList.toggle('activa', Math.abs(tarjetaCentro - window.innerWidth / 2) < rect.width / 2);
+      });
+    });
+
+    // === Reactivar autoplay al salir de la tarjeta activa ===
+    carrusel.addEventListener('scrollend', () => {
+      if (!carrusel.querySelector('.tarjeta.activa')) {
+        iniciarAutoplay();
+      }
     });
   });
 }
