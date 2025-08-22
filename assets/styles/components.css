@@ -8,32 +8,41 @@
 
 /* === Tarjeta base === */
 .tarjeta {
-  max-width: 300px;
+  flex: 0 0 auto;
   width: 65vw;
+  max-width: 300px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  flex: 0 0 auto;
   background: linear-gradient(to bottom, rgba(0, 195, 255, 0.8), rgba(220, 237, 245, 0.9));
-scroll-snap-align: center;
-
+  scroll-snap-align: center;
   border-radius: 10px;
-  
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  transition: transform 2s ease;
-  
+  transition: transform 2s ease, width 2s ease;
   transform: scale(1);
+  z-index: 1;
 }
 
-.tarjeta.activa {
-  width: 90vw; /* tarjeta centrada ocupa el 90% del ancho de pantalla */
-  max-width: none;
-  transform: scale(1.05); /* opcional: pequeño zoom visual */
-  z-index: 2;
+/* === Zoom solo en pantallas pequeñas === */
+@media screen and (max-width: 768px) {
+  .tarjeta.activa {
+    width: 90vw;
+    max-width: none;
+    transform: scale(1.15);
+    z-index: 2;
+  }
 }
 
-
+/* === En escritorio, desactivamos el zoom === */
+@media screen and (min-width: 769px) {
+  .tarjeta.activa {
+    width: 65vw;
+    max-width: 300px;
+    transform: scale(1);
+    z-index: 1;
+  }
+}
 
 /* === Imagen dentro de tarjeta === */
 .tarjeta img {
@@ -168,9 +177,10 @@ section h2 {
 .carrusel-container {
   position: relative;
   display: flex;
+  justify-content: center;
   align-items: center;
   overflow: hidden;
-  padding: 0 0;
+  padding: 0;
 }
 
 .carrusel {
@@ -179,17 +189,13 @@ section h2 {
   overflow-x: auto;
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
-  padding: 3rem 3rem;
-  min-height: 30px; /* Altura base para tarjetas normales */
-  
+  padding: 3rem;
+  min-height: 30px;
+  max-width: 1500px;
+  width: 100%;
 }
 
-.carrusel .tarjeta.activa {
-  transform: scale(1.15);
-}
-
-
-/* === Tarjetas en carrusel (heredan base pero se adaptan) === */
+/* === Tarjetas dentro del carrusel === */
 .carrusel .tarjeta {
   flex: 0 0 auto;
   scroll-snap-align: center;
