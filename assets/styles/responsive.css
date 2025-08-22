@@ -17,8 +17,13 @@
   }
 
   .reseña {
-    margin: 1rem;
-  }
+  width: 90%;
+  padding: 1rem;
+  margin: 1rem auto;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
 
   .btn-whatsapp {
     font-size: 0.9rem;
