@@ -1,45 +1,37 @@
-/* Botón de WhatsApp */
-.btn-whatsapp {
-background-color: #25D366;
-color: white;
-padding: 0.8rem 1.5rem;
-border-radius: 25px;
-text-decoration: none;
-font-weight: bold;
-font-size: 1rem;
-display: inline-block;
-transition: background-color 0.3s ease;
+/*.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 columnas iguales
+  gap:2 rem;
 }
 
-.btn-whatsapp:hover {
-background-color: #1ebe5d;
+.t1{
+    grid-column: 3/span 1;
 }
-
-/* Títulos de sección */
-section h2 {
-font-size: 2rem;
-margin-bottom: 2rem;
-color: var(--azul-mar);
-text-align: center;
+.t2{
+    grid-column: 4/span 1;
 }
-
-/* Tarjetas */
+*/
 .tarjetas {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-gap: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;               
+  justify-content: center;     
+  gap: 2rem;                   
 }
 
 .tarjeta {
-background-color: white;
-border-radius: 10px;
-overflow: hidden;
-box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-display: flex;
-flex-direction: column;
-justify-content: space-between;
-min-height: 320px;
-transition: transform 0.3s ease;
+  max-width: 260px;         /* Tamaño máximo por tarjeta */
+  min-height: 320px;        /* Altura mínima para mantener proporción */
+  margin: 0 auto;           /* Centra la tarjeta si hay espacio */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  ;
+  background-color: var(--dorado);
 }
 
 .tarjeta:hover {
@@ -58,12 +50,24 @@ flex-grow: 1;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
+align-items: center;
 }
 
-/* Precio */
+.tarjeta h3 {
+font-size: 1.1rem;
+margin-bottom: 0.5rem;
+color: var(--azul-mar);
+}
+
+.tarjeta p {
+font-size: 0.9rem;
+margin-bottom: 0.5rem;
+color: #555;
+}
+
 .precio {
-margin: 0.5rem 0;
 font-size: 1rem;
+margin-bottom: 1rem;
 }
 
 .precio .original {
@@ -78,4 +82,43 @@ font-weight: bold;
 background-color: var(--rojo-suave);
 padding: 0.2rem 0.5rem;
 border-radius: 5px;
+}
+
+.tarjeta a {
+align-self: flex-start;
+background-color: var(--whatsapp);
+color: white;
+padding: 0.6rem 1rem;
+border-radius: 20px;
+text-decoration: none;
+font-size: 0.9rem;
+font-weight: bold;
+transition: background-color 0.3s ease;
+}
+
+.tarjeta a:hover {
+background-color: #1f5c3f;
+}
+h2 {
+  text-align: center;
+  color: var(--azul-mar);
+  padding: 2rem;
+}
+.btn-whatsapp {
+  background-color: var(--whatsapp);  /* Color oficial de WhatsApp */
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  display: inline-block;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  align-self: center;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe5d;
+  transform: scale(1.05);
 }

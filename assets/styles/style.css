@@ -1,10 +1,10 @@
 :root {
-  --verde: #4CAF50;
+  --whatsapp: #4CAF50;
   --azul-mar: #0077B6;
   --arena: #F4EBD0;
   --blanco: #ffffff;
   --gris-suave: #f9f9f9;
-  --verde-claro:rgb(232, 248, 223);
+  --whatsapp-claro:rgb(232, 248, 223);
   --azul-claro:rgb(205, 227, 245);
 
 }
@@ -117,7 +117,7 @@ header p {
 
 .tarjeta a {
   display: inline-block;
-  background-color: var(--verde);
+  background-color: var(--whatsapp);
   color: white;
   padding: 0.4rem 0.8rem;
   border-radius: 15px;
@@ -136,7 +136,7 @@ header p {
 }
 
 .valorados {
-  background-color: var(--verde-claro);
+  background-color: var(--whatsapp-claro);
 }
 
 .contenedor {
