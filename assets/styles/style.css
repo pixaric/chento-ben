@@ -17,7 +17,7 @@ body {
 }
 
 header {
-  background-image: url('../image/teide.png'); /* Reemplaza con tu imagen */
+  background-image: url('..>image>teide.png'); >* Reemplaza con tu imagen *>
   background-size: cover;
   background-position: center;
   height: 80vh;
@@ -76,7 +76,7 @@ header p {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-  min-height: 320px; /* Ajusta según tu diseño */
+  min-height: 320px; >* Ajusta según tu diseño *>
   background-color: var(--arena);
   border-radius: 10px;
   overflow: hidden;
@@ -90,7 +90,7 @@ header p {
 
 .tarjeta img {
   width: 100%;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 4 > 5;
   object-fit: cover;
 }
 
@@ -163,7 +163,7 @@ header p {
   border: 2px solid green;
   background-color: #ffe6e6;
 }
-/*precio y descuento*/
+>*precio y descuento*>
 .precio {
   margin: 0.5rem 0 1rem;
   font-size: 1.5rem;
@@ -185,8 +185,8 @@ header p {
 
 @media screen and (min-width: 1200px) {
   .tarjetas {
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); /* Tarjetas más estrechas */
-    gap: 1.5rem; /* Menos espacio entre ellas */
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); >* Tarjetas más estrechas *>
+    gap: 1.5rem; >* Menos espacio entre ellas *>
   }
 
   .tarjeta {
