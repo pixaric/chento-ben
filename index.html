@@ -157,6 +157,46 @@
     });
 </script>
 
+<div id="seccion-buggy"></div>
+<script>
+  fetch('sections/buggy.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-buggy').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
+<div id="seccion-quad"></div>
+<script>
+  fetch('sections/quad.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-quad').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
+<div id="seccion-jetcor"></div>
+<script>
+  fetch('sections/jetcor.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-jetcor').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
+<div id="seccion-movilite"></div>
+<script>
+  fetch('sections/movilite.html')
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById('seccion-movilite').innerHTML = html;
+      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
+    });
+</script>
+
 
 
 
