@@ -15,23 +15,23 @@
 <body>
   <h2>Editar excursión existente</h2>
   <select id="excursion-selector"></select>
-  <form id="edit-form" style="display:none;">
-    <input type="hidden" name="rowIndex">
-    <label>Nombre:<input type="text" name="name" required></label>
-    <label>Descripción:<textarea name="description" required></textarea></label>
-    <label>Categoría:<input type="text" name="category" required></label>
-    <label>Precio:<input type="number" name="price" required></label>
-    <label>Precio original:<input type="number" name="originalPrice"></label>
-    <label>¿Recomendado? (true/false):<input type="text" name="recommended"></label>
-    <label>Horario:<input type="text" name="schedule"></label>
-    <label>Actividades:<input type="text" name="activities"></label>
-    <label>Latitud:<input type="text" name="origin_lat"></label>
-    <label>Longitud:<input type="text" name="origin_lng"></label>
-    <button type="submit">Guardar cambios</button>
-  </form>
+<form action="https://script.google.com/macros/s/AKfycbzTHC6MZv-_dMOu40Ah1AdDHfPCHuNVoB8X3DpVEodWfAPipGkvBrsPMISrry6eBuJ0/exec" method="POST">
+  <input type="hidden" name="rowIndex" value="2">
+  <label>Nombre:<input type="text" name="name" required></label>
+  <label>Descripción:<textarea name="description" required></textarea></label>
+  <label>Categoría:<input type="text" name="category" required></label>
+  <label>Precio:<input type="number" name="price" required></label>
+  <label>Precio original:<input type="number" name="originalPrice"></label>
+  <label>¿Recomendado?:<input type="text" name="recommended"></label>
+  <label>Horario:<input type="text" name="schedule"></label>
+  <label>Actividades:<input type="text" name="activities"></label>
+  <label>Latitud:<input type="text" name="origin_lat"></label>
+  <label>Longitud:<input type="text" name="origin_lng"></label>
+  <button type="submit">Guardar cambios</button>
+</form>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzzy2QLUZDRwIl0UQF6RrvfXz8Cb_YyfVa3aqP8fZiQE36iJW8d5FEGn5zcKd8kskR4/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbzTHC6MZv-_dMOu40Ah1AdDHfPCHuNVoB8X3DpVEodWfAPipGkvBrsPMISrry6eBuJ0/exec';
 
     let excursions = [];
 
@@ -66,7 +66,7 @@
       // Mantener el enlace original de la imagen
       const selectedIndex = document.getElementById('excursion-selector').value;
       data.image = excursions[selectedIndex].image;
-
+console.log("Datos enviados:", data);
       fetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(data),
