@@ -14,14 +14,14 @@ body {
     font-family: var(--body-font);
     margin: 0;
     background-color: var(--background-color);
-    background-image: url('natural-bg-pattern.png');
+    background-image: url('/assets/images/natural-bg-pattern.png');
     background-repeat: repeat;
     color: var(--text-color);
     line-height: 1.6;
 }
 
 header {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('header-bg.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/header-bg.png');
     background-size: cover;
     background-position: center;
     color: white;
@@ -195,6 +195,62 @@ main h2 {
     font-size: 0.95rem;
 }
 
+.card-details {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    color: var(--primary-color);
+    margin-top: 3px;
+    font-size: 1em;
+    width: 16px;
+    text-align: center;
+}
+
+.activities-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.activities-list li {
+    margin-bottom: 0.25rem;
+}
+
+.activities-list li::before {
+    content: '✓';
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.map-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.map-link:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
 .price-container {
     display: flex;
     align-items: baseline;
@@ -325,6 +381,14 @@ footer {
     .card-content p {
         font-size: 0.85rem;
         margin-bottom: 1rem;
+    }
+    .card-details {
+        margin-bottom: 1rem;
+        padding: 0.75rem 0;
+        gap: 0.5rem;
+    }
+    .detail-item {
+        font-size: 0.8rem;
     }
     .price-container {
         margin-bottom: 1rem;
