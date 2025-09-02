@@ -1,225 +1,52 @@
-<!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" >
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-
-    <title>Chento-Ben | Excursiones con alma</title>
-
-    <!-- Tipografía -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap"
-      rel="stylesheet"
-    >
-
-    <!-- Estilos divididos -->
-    <link rel="stylesheet" href="assets/styles/base.css" >
-    <link rel="stylesheet" href="assets/styles/components.css" >
-    <link rel="stylesheet" href="assets/styles/layaot.css" >
-    <link rel="stylesheet" href="assets/styles/responsive.css" >
-  </head>
-  <body>
-    <!--  Cabecera -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chento-Ben | Excursiones & Aventuras</title>
+    <link rel="stylesheet" href="assets/styles/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
     <header>
-      <div class="contenedor">
-        <h1>Chento-Ben</h1>
-        <p>Explora, siente, vive. Excursiones con alma.</p>
-        
-      </div>
+        <h1 class="brand-name">Chento-Ben</h1>
+        <p>Vive la aventura, crea tu historia. ¡Contáctanos y empieza a explorar!</p>
     </header>
 
-    <section class="reseña animada">
-  <p>
-    Descubre la magia del mar en cada experiencia. En nuestra página encontrarás excursiones únicas, pensadas para quienes buscan aventura, tranquilidad y paisajes inolvidables. Desde paseos en velero al atardecer hasta rutas en kayak por rincones secretos, cada propuesta está diseñada para que vivas el océano como nunca antes.
-  </p>
-</section>
-
-
-    
-
-    <!--  Sección de recomendados -->
-    <section class="recomendados">
-      <div class="contenedor">
-        <h2>RECOMENDADOS</h2>
-        <div class="tarjetas">
-          <!-- Tarjetas recomendadas -->
-
-          <div class="tarjeta t1">
-            <img src="assets/images/barco/1.jpg" alt="Excursión Bella Mar" >
-            <div class="contenido">
-              <h3>Excursión Bella Mar</h3>
-              <p>
-                Disfruta de una travesía inolvidable por la costa sur con vistas
-                al Teide y baño en aguas cristalinas.
-              </p>
-              <div class="precio">
-                <span class="original">€75</span>
-                <span class="descuento">€60</span>
-              </div>
-              <a href="detalle.html?id=bella-mar" class="btn-whatsapp"
-                >Reservar ahora</a
-              >
+    <main>
+        <section id="recommended-section">
+            <h2>Recomendados para ti</h2>
+            <div id="recommended-container" class="excursions-grid">
+                <!-- Recommended cards will be inserted here by JavaScript -->
             </div>
-          </div>
-          <div class="tarjeta t2">
-            <img src="assets/images/barco/1.jpg" alt="Excursión Bella Mar" >
-            <div class="contenido">
-              <h3>Excursión Bella Mar</h3>
-              <p>
-                Disfruta de una travesía inolvidable por la costa sur con vistas
-                al Teide y baño en aguas cristalinas.
-              </p>
-              <div class="precio">
-                <span class="original">€75</span>
-                <span class="descuento">€60</span>
-              </div>
-              <a href="detalle.html?id=bella-mar" class="btn-whatsapp"
-                >Reservar ahora</a
-              >
-            </div>
-          </div>
+        </section>
+
+        <div class="filter-container" id="filter-container">
+             <!-- Filter buttons will be inserted here by JavaScript -->
         </div>
-      </div>
-    </section>
-
-    <!--  Sección de valorados -->
-    <section class="valorados">
-      <div class="contenedor">
-        <h2>VALORADOS</h2>
-        <div class="tarjetas">
-          <!-- Tarjetas valoradas -->
-          <div class="tarjeta">
-            <img src="assets/images/barco/1.jpg" alt="Excursión Bella Mar" >
-            <div class="contenido">
-              <h3>Excursión Bella Mar</h3>
-              <p>
-                Disfruta de una travesía inolvidable por la costa sur con vistas
-                al Teide y baño en aguas cristalinas.
-              </p>
-              <div class="precio">
-                <span class="original">€75</span>
-                <span class="descuento">€60</span>
-              </div>
-              <a href="detalle.html?id=bella-mar" class="btn-whatsapp"
-                >Reservar ahora</a
-              >
-            </div>
-          </div>
-
-          <div class="tarjeta">
-            <img src="assets/images/barco/1.jpg" alt="Excursión Bella Mar" >
-            <div class="contenido">
-              <h3>Excursión Bella Mar</h3>
-              <p>
-                Disfruta de una travesía inolvidable por la costa sur con vistas
-                al Teide y baño en aguas cristalinas.
-              </p>
-              <div class="precio">
-                <span class="original">€75</span>
-                <span class="descuento">€60</span>
-              </div>
-              <a href="detalle.html?id=bella-mar" class="btn-whatsapp"
-                >Reservar ahora</a
-              >
-            </div>
-          </div>
+        <h2>Nuestras Excursiones</h2>
+        <div id="excursions-container" class="excursions-grid">
+            <!-- Las tarjetas de excursiones se insertarán aquí por JavaScript -->
         </div>
-      </div>
-    </section>
+    </main>
 
-    <!-- Seccion barco-->
-<div id="seccion-barco"></div>
-<script>
-  fetch('sections/barco.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-barco').innerHTML = html;
-    });
-</script>
-
-<div id="seccion-velero"></div>
-<script>
-  fetch('sections/velero.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-velero').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-<div id="seccion-jetsky"></div>
-<script>
-  fetch('sections/jetsky.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-jetsky').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-<div id="seccion-buggy"></div>
-<script>
-  fetch('sections/buggy.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-buggy').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-<div id="seccion-quad"></div>
-<script>
-  fetch('sections/quad.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-quad').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-<div id="seccion-jetcor"></div>
-<script>
-  fetch('sections/jetcor.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-jetcor').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-<div id="seccion-movilite"></div>
-<script>
-  fetch('sections/movilite.html')
-    .then(res => res.text())
-    .then(html => {
-      document.getElementById('seccion-movilite').innerHTML = html;
-      activarCarruseles(); // ¡Activa el carrusel una vez insertado!
-    });
-</script>
-
-
-
-
-
-    <!--  Footer -->
     <footer>
-      <div class="contenedor">
-        <p>&copy; 2025 Chento-Ben. Todos los derechos reservados.</p>
-      </div>
+        <div class="social-media">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p>&copy; 2024 Chento-Ben. Todos los derechos reservados.</p>
     </footer>
 
-<a href="https://wa.me/34684792506" class="whatsapp-flotante" target="_blank" rel="noopener noreferrer" aria-label="Reservar por WhatsApp">
-  <img src="assets/icons/whatsapp.svg" alt="WhatsApp">
-</a>
+    <a href="https://wa.me/5491112345678" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
 
+    <script src="assets/js/script.js"></script>
+    <script src="assets/js/escursiones.js"></script>
 
-  
-
-
-
-
-
-    <!-- Scripts -->
-    <script src="assets/js/main.js" ></script>
-  </body>
+</body>
 </html>

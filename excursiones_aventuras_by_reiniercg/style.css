@@ -1,0 +1,416 @@
+:root {
+    --primary-color: #2c5d63; /* Deep teal green */
+    --secondary-color: #d97706; /* Earthy amber/orange */
+    --secondary-hover: #b45309; /* Darker amber */
+    --background-color: #f8f7f2; /* Creamy, earthy off-white */
+    --text-color: #3f3f3f; /* Dark gray, softer than black */
+    --card-bg: #ffffff;
+    --footer-bg: #3a3a3a; /* Dark charcoal */
+    --brand-font: 'Pacifico', cursive;
+    --body-font: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: var(--body-font);
+    margin: 0;
+    background-color: var(--background-color);
+    background-image: url('natural-bg-pattern.png');
+    background-repeat: repeat;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+header {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('header-bg.png');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    text-align: center;
+    padding: 5rem 1rem;
+    text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+}
+
+header h1 {
+    margin: 0;
+    font-family: var(--brand-font);
+    font-size: 4.5rem;
+    font-weight: 400; /* Pacifico solo tiene peso 400 */
+    letter-spacing: 2px;
+    animation: fadeInDown 1s ease-out;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header p {
+    font-size: 1.3rem;
+    font-weight: 400;
+    max-width: 600px;
+    margin: 1rem auto 0;
+    animation: fadeInUp 1s ease-out 0.3s;
+    animation-fill-mode: backwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main {
+    padding: 2rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+main h2 {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+#recommended-section {
+    background-color: rgba(44, 93, 99, 0.05);
+    padding: 2rem;
+    border-radius: 20px;
+    margin-bottom: 3rem;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.filter-btn {
+    background-color: transparent;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 50px;
+    font-family: var(--body-font);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 4px 10px rgba(44, 93, 99, 0.3);
+}
+
+.excursions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+    transform: translateY(30px);
+    position: relative;
+}
+
+.card-badge {
+    position: absolute;
+    top: 15px;
+    left: -8px;
+    background: linear-gradient(45deg, var(--secondary-color), var(--secondary-hover));
+    color: white;
+    padding: 5px 15px 5px 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 0 50px 50px 0;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 10;
+}
+
+.card.visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+}
+
+.card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-bottom: 4px solid var(--secondary-color);
+}
+
+.card-content {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-content h3 {
+    margin-top: 0;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.card-content p {
+    flex-grow: 1;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.card-details {
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.detail-item i {
+    color: var(--primary-color);
+    margin-top: 3px;
+    font-size: 1em;
+    width: 16px;
+    text-align: center;
+}
+
+.activities-list {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.activities-list li {
+    margin-bottom: 0.25rem;
+}
+
+.activities-list li::before {
+    content: '✓';
+    color: var(--secondary-color);
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.map-link {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.map-link:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+.price-container {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.current-price {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.original-price {
+    font-size: 1.2rem;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.discount-badge {
+    background-color: var(--secondary-color);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.whatsapp-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: linear-gradient(45deg, var(--secondary-color), var(--secondary-hover));
+    color: white;
+    padding: 14px 22px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.whatsapp-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.whatsapp-button .fab {
+    font-size: 1.2em;
+}
+
+.whatsapp-fab {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    background-color: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+}
+
+.whatsapp-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
+
+footer {
+    text-align: center;
+    padding: 2.5rem 1rem 1.5rem;
+    background-color: var(--footer-bg);
+    color: white;
+    margin-top: 3rem;
+}
+
+.social-media {
+    margin-bottom: 1.5rem;
+}
+
+.social-media a {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0 1rem;
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: inline-block; /* For transform to work */
+}
+
+.social-media a:hover {
+    color: var(--secondary-color);
+    transform: translateY(-3px);
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 3.5rem;
+    }
+    header p {
+        font-size: 1.1rem;
+    }
+    main h2 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .excursions-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    .card-content {
+        padding: 1rem;
+    }
+    .card-content h3 {
+        font-size: 1.1rem;
+    }
+    .card-content p {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    .card-details {
+        margin-bottom: 1rem;
+        padding: 0.75rem 0;
+        gap: 0.5rem;
+    }
+    .detail-item {
+        font-size: 0.8rem;
+    }
+    .price-container {
+        margin-bottom: 1rem;
+    }
+    .current-price {
+        font-size: 1.5rem;
+    }
+    .original-price {
+        font-size: 1rem;
+    }
+    .whatsapp-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    .whatsapp-button .fab {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 420px) {
+    .excursions-grid {
+        /* On very small screens, 1 column is better for readability */
+        grid-template-columns: 1fr;
+    }
+}
