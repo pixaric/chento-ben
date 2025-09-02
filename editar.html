@@ -10,81 +10,99 @@
     input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; }
     button { margin-top: 20px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
     button:hover { background: #218838; }
+    .card { background: white; padding: 15px; margin: 10px auto; border-radius: 6px; box-shadow: 0 0 5px rgba(0,0,0,0.1); max-width: 600px; }
+    .confirm { background: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border-radius: 4px; text-align: center; }
   </style>
 </head>
 <body>
   <h2>Editar excursión existente</h2>
   <select id="excursion-selector"></select>
-<form id="edit-form" action="https://script.google.com/macros/s/AKfycbz2SHLY0Yrv2QuAdufTp_owOsy4DQMvfcxxLWKana9fq5e_W4mR3V_E92drS5PxZ8rh/exec" method="POST">
-  <input type="hidden" name="rowIndex" id="rowIndex">
-  <label>Nombre:<input type="text" name="name" id="name" required></label>
-  <label>Descripción:<textarea name="description" id="description" required></textarea></label>
-  <label>Categoría:<input type="text" name="category" id="category" required></label>
-  <label>Precio:<input type="number" name="price" id="price" required></label>
-  <label>Precio original:<input type="number" name="originalPrice" id="originalPrice"></label>
-  <label>¿Recomendado?:<input type="text" name="recommended" id="recommended"></label>
-  <label>Horario:<input type="text" name="schedule" id="schedule"></label>
-  <label>Actividades:<input type="text" name="activities" id="activities"></label>
-  <label>Latitud:<input type="text" name="origin_lat" id="origin_lat"></label>
-  <label>Longitud:<input type="text" name="origin_lng" id="origin_lng"></label>
-  <button type="submit">Guardar cambios</button>
-</form>
+
+  <form id="edit-form">
+    <input type="hidden" name="rowIndex" id="rowIndex">
+    <label>Nombre:<input type="text" name="name" id="name" required></label>
+    <label>Descripción:<textarea name="description" id="description" required></textarea></label>
+    <label>Categoría:<input type="text" name="category" id="category" required></label>
+    <label>Precio:<input type="number" name="price" id="price" required></label>
+    <label>Precio original:<input type="number" name="originalPrice" id="originalPrice"></label>
+    <label>¿Recomendado?:<input type="text" name="recommended" id="recommended"></label>
+    <label>Horario:<input type="text" name="schedule" id="schedule"></label>
+    <label>Actividades:<input type="text" name="activities" id="activities"></label>
+    <label>Latitud:<input type="text" name="origin_lat" id="origin_lat"></label>
+    <label>Longitud:<input type="text" name="origin_lng" id="origin_lng"></label>
+    <button type="submit">Guardar cambios</button>
+  </form>
+
+  <div id="excursion-cards"></div>
 
   <script>
-  const API_URL = 'https://script.google.com/macros/s/AKfycbz2SHLY0Yrv2QuAdufTp_owOsy4DQMvfcxxLWKana9fq5e_W4mR3V_E92drS5PxZ8rh/exec';
-  let excursions = [];
+    const API_URL = 'https://script.google.com/macros/s/AKfycbz2SHLY0Yrv2QuAdufTp_owOsy4DQMvfcxxLWKana9fq5e_W4mR3V_E92drS5PxZ8rh/exec';
+    let excursions = [];
 
-  fetch(API_URL)
-    .then(res => res.json())
-    .then(data => {
-      excursions = data;
-      const selector = document.getElementById('excursion-selector');
-      selector.innerHTML = data.map((ex, i) =>
-        `<option value="${i}">${ex.name}</option>`
-      ).join('');
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        excursions = data;
+        const selector = document.getElementById('excursion-selector');
+        const cards = document.getElementById('excursion-cards');
+        selector.innerHTML = data.map((ex, i) =>
+          `<option value="${i}">${ex.name}</option>`
+        ).join('');
+        cards.innerHTML = data.map(ex => `
+          <div class="card" id="excursion-${ex.rowIndex}">
+            <h3>${ex.name}</h3>
+            <p>${ex.description}</p>
+            <p>Precio: €${ex.price}</p>
+          </div>
+        `).join('');
+      });
+
+    document.getElementById('excursion-selector').addEventListener('change', (e) => {
+      const index = e.target.value;
+      const excursion = excursions[index];
+      document.getElementById('rowIndex').value = excursion.rowIndex;
+      document.getElementById('name').value = excursion.name;
+      document.getElementById('description').value = excursion.description;
+      document.getElementById('category').value = excursion.category;
+      document.getElementById('price').value = excursion.price;
+      document.getElementById('originalPrice').value = excursion.originalPrice;
+      document.getElementById('recommended').value = excursion.recommended;
+      document.getElementById('schedule').value = excursion.schedule;
+      document.getElementById('activities').value = excursion.activities;
+      document.getElementById('origin_lat').value = excursion.origin_lat;
+      document.getElementById('origin_lng').value = excursion.origin_lng;
     });
 
-  document.getElementById('edit-form').addEventListener('submit', function(e) {
-  e.preventDefault();
+    document.getElementById('edit-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
 
-  const formData = new FormData(e.target);
-  const data = {};
-  formData.forEach((value, key) => data[key] = value);
+      fetch(API_URL, {
+        method: 'POST',
+        body: new URLSearchParams(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        const card = document.getElementById(`excursion-${data.rowIndex}`);
+        if (card) {
+          card.querySelector('h3').textContent = data.name;
+          card.querySelector('p:nth-of-type(1)').textContent = data.description;
+          card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${data.price}`;
+        }
 
-  // Mantener el enlace original de la imagen si lo usas
-  const selectedIndex = document.getElementById('excursion-selector').value;
-  data.image = excursions[selectedIndex].image;
-
-  fetch(API_URL, {
-    method: 'POST',
-    body: new URLSearchParams(data) // ← importante: formato compatible con e.parameter
-  })
-  .then(res => res.text())
-  .then(msg => {
-    // Actualizar la tarjeta en el DOM
-    const card = document.getElementById(`excursion-${data.rowIndex}`);
-    if (card) {
-      card.querySelector('h3').textContent = data.name;
-      card.querySelector('p:nth-of-type(1)').textContent = data.description;
-      card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${data.price}`;
-    }
-
-    // Mostrar confirmación visual
-    const confirm = document.createElement('div');
-    confirm.textContent = "✅ Excursión actualizada";
-    confirm.style.background = "#d4edda";
-    confirm.style.color = "#155724";
-    confirm.style.padding = "10px";
-    confirm.style.marginTop = "10px";
-    e.target.appendChild(confirm);
-
-    setTimeout(() => confirm.remove(), 3000);
-  })
-  .catch(err => {
-    console.error("Error al actualizar:", err);
-    alert("Hubo un error al guardar los cambios.");
-  });
-});
-</script>
+        const confirm = document.createElement('div');
+        confirm.className = 'confirm';
+        confirm.textContent = "✅ Excursión actualizada correctamente";
+        e.target.appendChild(confirm);
+        setTimeout(() => confirm.remove(), 3000);
+      })
+      .catch(err => {
+        console.error("Error al actualizar:", err);
+        alert("Hubo un error al guardar los cambios.");
+      });
+    });
+  </script>
 </body>
 </html>
