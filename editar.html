@@ -44,22 +44,47 @@
       ).join('');
     });
 
-  document.getElementById('excursion-selector').addEventListener('change', (e) => {
-    const index = e.target.value;
-    const excursion = excursions[index];
+  document.getElementById('edit-form').addEventListener('submit', function(e) {
+  e.preventDefault();
 
-    document.getElementById('rowIndex').value = excursion.rowIndex;
-    document.getElementById('name').value = excursion.name;
-    document.getElementById('description').value = excursion.description;
-    document.getElementById('category').value = excursion.category;
-    document.getElementById('price').value = excursion.price;
-    document.getElementById('originalPrice').value = excursion.originalPrice;
-    document.getElementById('recommended').value = excursion.recommended;
-    document.getElementById('schedule').value = excursion.schedule;
-    document.getElementById('activities').value = excursion.activities;
-    document.getElementById('origin_lat').value = excursion.origin_lat;
-    document.getElementById('origin_lng').value = excursion.origin_lng;
+  const formData = new FormData(e.target);
+  const data = {};
+  formData.forEach((value, key) => data[key] = value);
+
+  // Mantener el enlace original de la imagen si lo usas
+  const selectedIndex = document.getElementById('excursion-selector').value;
+  data.image = excursions[selectedIndex].image;
+
+  fetch(API_URL, {
+    method: 'POST',
+    body: new URLSearchParams(data) // ← importante: formato compatible con e.parameter
+  })
+  .then(res => res.text())
+  .then(msg => {
+    // Actualizar la tarjeta en el DOM
+    const card = document.getElementById(`excursion-${data.rowIndex}`);
+    if (card) {
+      card.querySelector('h3').textContent = data.name;
+      card.querySelector('p:nth-of-type(1)').textContent = data.description;
+      card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${data.price}`;
+    }
+
+    // Mostrar confirmación visual
+    const confirm = document.createElement('div');
+    confirm.textContent = "✅ Excursión actualizada";
+    confirm.style.background = "#d4edda";
+    confirm.style.color = "#155724";
+    confirm.style.padding = "10px";
+    confirm.style.marginTop = "10px";
+    e.target.appendChild(confirm);
+
+    setTimeout(() => confirm.remove(), 3000);
+  })
+  .catch(err => {
+    console.error("Error al actualizar:", err);
+    alert("Hubo un error al guardar los cambios.");
   });
+});
 </script>
 </body>
 </html>
