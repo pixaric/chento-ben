@@ -16,71 +16,50 @@
   <h2>Editar excursión existente</h2>
   <select id="excursion-selector"></select>
 <form id="edit-form" action="https://script.google.com/macros/s/AKfycbzTHC6MZv-_dMOu40Ah1AdDHfPCHuNVoB8X3DpVEodWfAPipGkvBrsPMISrry6eBuJ0/exec" method="POST">
-  <input type="hidden" name="rowIndex" value="2">
-  <label>Nombre:<input type="text" name="name" required></label>
-  <label>Descripción:<textarea name="description" required></textarea></label>
-  <label>Categoría:<input type="text" name="category" required></label>
-  <label>Precio:<input type="number" name="price" required></label>
-  <label>Precio original:<input type="number" name="originalPrice"></label>
-  <label>¿Recomendado?:<input type="text" name="recommended"></label>
-  <label>Horario:<input type="text" name="schedule"></label>
-  <label>Actividades:<input type="text" name="activities"></label>
-  <label>Latitud:<input type="text" name="origin_lat"></label>
-  <label>Longitud:<input type="text" name="origin_lng"></label>
+  <input type="hidden" name="rowIndex" id="rowIndex">
+  <label>Nombre:<input type="text" name="name" id="name" required></label>
+  <label>Descripción:<textarea name="description" id="description" required></textarea></label>
+  <label>Categoría:<input type="text" name="category" id="category" required></label>
+  <label>Precio:<input type="number" name="price" id="price" required></label>
+  <label>Precio original:<input type="number" name="originalPrice" id="originalPrice"></label>
+  <label>¿Recomendado?:<input type="text" name="recommended" id="recommended"></label>
+  <label>Horario:<input type="text" name="schedule" id="schedule"></label>
+  <label>Actividades:<input type="text" name="activities" id="activities"></label>
+  <label>Latitud:<input type="text" name="origin_lat" id="origin_lat"></label>
+  <label>Longitud:<input type="text" name="origin_lng" id="origin_lng"></label>
   <button type="submit">Guardar cambios</button>
 </form>
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbzTHC6MZv-_dMOu40Ah1AdDHfPCHuNVoB8X3DpVEodWfAPipGkvBrsPMISrry6eBuJ0/exec';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbzTHC6MZv-_dMOu40Ah1AdDHfPCHuNVoB8X3DpVEodWfAPipGkvBrsPMISrry6eBuJ0/exec';
+  let excursions = [];
 
-    let excursions = [];
-
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        excursions = data;
-        const selector = document.getElementById('excursion-selector');
-        selector.innerHTML = data.map((ex, i) =>
-          `<option value="${i}">${ex.name}</option>`
-        ).join('');
-      });
-
-    document.getElementById('excursion-selector').addEventListener('change', (e) => {
-      const index = e.target.value;
-      const excursion = excursions[index];
-      const form = document.getElementById('edit-form');
-      form.style.display = 'block';
-      Object.keys(excursion).forEach(key => {
-        if (form.elements[key] && key !== 'image') {
-          form.elements[key].value = excursion[key];
-        }
-      });
+  fetch(API_URL)
+    .then(res => res.json())
+    .then(data => {
+      excursions = data;
+      const selector = document.getElementById('excursion-selector');
+      selector.innerHTML = data.map((ex, i) =>
+        `<option value="${i}">${ex.name}</option>`
+      ).join('');
     });
 
-    document.getElementById('edit-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
+  document.getElementById('excursion-selector').addEventListener('change', (e) => {
+    const index = e.target.value;
+    const excursion = excursions[index];
 
-      // Mantener el enlace original de la imagen
-      const selectedIndex = document.getElementById('excursion-selector').value;
-      data.image = excursions[selectedIndex].image;
-console.log("Datos enviados:", data);
-      fetch(API_URL, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-Type': 'application/json' }
-      })
-      .then(res => res.text())
-      .then(msg => {
-        alert("Excursión actualizada correctamente ✅");
-      })
-      .catch(err => {
-        console.error("Error al actualizar:", err);
-        alert("Hubo un error al guardar los cambios.");
-      });
-    });
-  </script>
+    document.getElementById('rowIndex').value = excursion.rowIndex;
+    document.getElementById('name').value = excursion.name;
+    document.getElementById('description').value = excursion.description;
+    document.getElementById('category').value = excursion.category;
+    document.getElementById('price').value = excursion.price;
+    document.getElementById('originalPrice').value = excursion.originalPrice;
+    document.getElementById('recommended').value = excursion.recommended;
+    document.getElementById('schedule').value = excursion.schedule;
+    document.getElementById('activities').value = excursion.activities;
+    document.getElementById('origin_lat').value = excursion.origin_lat;
+    document.getElementById('origin_lng').value = excursion.origin_lng;
+  });
+</script>
 </body>
 </html>
