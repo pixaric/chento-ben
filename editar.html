@@ -22,10 +22,26 @@
     <input type="hidden" name="rowIndex" id="rowIndex">
     <label>Nombre:<input type="text" name="name" id="name" required></label>
     <label>Descripción:<textarea name="description" id="description" required></textarea></label>
-    <label>Categoría:<input type="text" name="category" id="category" required></label>
+    <label>Categoría:
+  <select name="category" id="category" required>
+    <option value="barco">Barco</option>
+    <option value="buggy">Buggy</option>
+    <option value="excursiones">Excursiones</option>
+    <option value="jetcor">Jetcor</option>
+    <option value="jetsky">Jetsky</option>
+    <option value="movilite">Movilite</option>
+    <option value="quad">Quad</option>
+    <option value="velero">Velero</option>
+  </select>
+</label>
     <label>Precio:<input type="number" name="price" id="price" required></label>
     <label>Precio original:<input type="number" name="originalPrice" id="originalPrice"></label>
-    <label>¿Recomendado?:<input type="text" name="recommended" id="recommended"></label>
+    <label>¿Recomendado?:
+  <select name="recommended" id="recommended">
+    <option value="true">Sí</option>
+    <option value="false">No</option>
+  </select>
+</label>
     <label>Horario:<input type="text" name="schedule" id="schedule"></label>
     <label>Actividades:<input type="text" name="activities" id="activities"></label>
     <label>Latitud:<input type="text" name="origin_lat" id="origin_lat"></label>
@@ -33,7 +49,7 @@
     <button type="submit">Guardar cambios</button>
   </form>
 
-  <div id="excursion-cards"></div>
+  
 
   <script>
     const API_URL = 'https://script.google.com/macros/s/AKfycbz2SHLY0Yrv2QuAdufTp_owOsy4DQMvfcxxLWKana9fq5e_W4mR3V_E92drS5PxZ8rh/exec';
@@ -63,10 +79,10 @@
       document.getElementById('rowIndex').value = excursion.rowIndex;
       document.getElementById('name').value = excursion.name;
       document.getElementById('description').value = excursion.description;
-      document.getElementById('category').value = excursion.category;
+      document.getElementById('category').value = excursion.category || "";
       document.getElementById('price').value = excursion.price;
       document.getElementById('originalPrice').value = excursion.originalPrice;
-      document.getElementById('recommended').value = excursion.recommended;
+      document.getElementById('recommended').value = String(excursion.recommended);
       document.getElementById('schedule').value = excursion.schedule;
       document.getElementById('activities').value = excursion.activities;
       document.getElementById('origin_lat').value = excursion.origin_lat;
