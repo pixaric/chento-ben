@@ -183,7 +183,8 @@ main h2 {
 }
 
 .card-content h3 {
-    margin-top: 0;
+    margin-top: -5px;
+    margin-bottom: -10px;
     font-size: 1.6rem;
     font-weight: 600;
     color: var(--primary-color);
