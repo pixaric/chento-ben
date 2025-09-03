@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     card.innerHTML = `
       ${excursion.recommended ? '<div class="card-badge">Recomendado</div>' : ''}
-      <img src="${excursion.image}" alt="${excursion.name}" class="card-img">
+      <img src="${excursion.image || 'https://via.placeholder.com/600x400?text=Sin+imagen'}" alt="${excursion.name}" class="card-img">
       <div class="card-content">
         <h3>${excursion.name}</h3>
         <p>${excursion.description}</p>
