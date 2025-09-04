@@ -14,14 +14,14 @@ body {
     font-family: var(--body-font);
     margin: 0;
     background-color: var(--background-color);
-    background-image: url('assets/images/natural-bg-pattern.png');
+    background-image: url('../images/natural-bg-pattern.png');
     background-repeat: repeat;
     color: var(--text-color);
     line-height: 1.6;
 }
 
 header {
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://pixaric.github.io/chento-ben/assets/images/header-bg.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../images/header-bg.png');
     background-size: cover;
     background-position: center;
     color: white;
