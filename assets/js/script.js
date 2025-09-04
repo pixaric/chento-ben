@@ -84,10 +84,10 @@ document.addEventListener('DOMContentLoaded', () => {
               ${excursion.activities.map(activity => `<li>${activity}</li>`).join('')}
             </ul>
           </div>
-         <div class="detail-item">
-  <i class="fas fa-route" style="margin-right: 6px; color: #2c7be5;"></i>
-  <a href="${excursion.location_url}" target="_blank" class="location-link">Cómo llegar</a>
-</div>
+          <div class="detail-item">
+        <i class="fas fa-map-marker-alt" style="margin-right: 6px; color: #2c7be5;"></i>
+        <a href="${excursion.location_url}" target="_blank" class="location-link">Ver ubicación</a>
+      </div>
 
         </div>
         ${priceHTML}
