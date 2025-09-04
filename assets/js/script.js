@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let excursions = [];
 
   // --- CARGAR EXCURSIONES DESDE GOOGLE SHEETS API ---
-  fetch('https://script.google.com/macros/s/AKfycbytbJaq7xFblcFv-tqWzcFR03SF2CjMoOdz6yqDQNdoAe1l_TpdxCDSlbjcgHPQGzYw/exec')
+  fetch('https://script.google.com/macros/s/AKfycbxamYo6cJ-f7nA3J5Eu-vOONxhJX_a2E_5NEQbKR4HDL9fULuxNi3e3MUVeGbwJyvus/exec')
     .then(response => response.json())
     .then(data => {
       excursions = data.map(item => ({
