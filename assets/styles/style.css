@@ -415,3 +415,24 @@ footer {
         grid-template-columns: 1fr;
     }
 }
+
+/*enlace al mapa*/
+.location-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #2c7be5;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.location-link i {
+  font-size: 1rem;
+  color: #2c7be5;
+}
+
+.location-link:hover {
+  color: #1a68d1;
+  text-decoration: underline;
+}

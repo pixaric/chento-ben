@@ -67,33 +67,34 @@ document.addEventListener('DOMContentLoaded', () => {
       mapLink = `https://www.google.com/maps/dir/?api=1&origin=My+Location&destination=${excursion.origin.lat},${excursion.origin.lng}&travelmode=driving`;
     }
 
-    card.innerHTML = `
-      ${excursion.recommended ? '<div class="card-badge">Recomendado</div>' : ''}
-      <img src="${excursion.image}" alt="${excursion.name}" class="card-img"> 
-      <div class="card-content">
-        <h3>${excursion.name}</h3>
-        <p>${excursion.description}</p>
-        <div class="card-details">
-          <div class="detail-item">
-            <i class="fas fa-clock"></i>
-            <span>${excursion.schedule}</span>
-          </div>
-          <div class="detail-item">
-            <i class="fas fa-tasks"></i>
-            <ul class="activities-list">
-              ${excursion.activities.map(activity => `<li>${activity}</li>`).join('')}
-            </ul>
-          </div>
-          <div class="detail-item">
-            <a href="${excursion.location_url}" target="_blank">Ver ubicación</a>
-          </div>
-        </div>
-        ${priceHTML}
-        <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="whatsapp-button">
-          <i class="fab fa-whatsapp"></i> Reservar por WhatsApp
-        </a>
+   card.innerHTML = `
+  ${excursion.recommended ? '<div class="card-badge">Recomendado</div>' : ''}
+  <img src="${excursion.image}" alt="${excursion.name}" class="card-img"> 
+  <div class="card-content">
+    <h3>${excursion.name}</h3>
+    <p>${excursion.description}</p>
+    <div class="card-details">
+      <div class="detail-item">
+        <i class="fas fa-clock"></i>
+        <span>${excursion.schedule}</span>
       </div>
-    `;
+      <div class="detail-item">
+        <i class="fas fa-tasks"></i>
+        <ul class="activities-list">
+          ${excursion.activities.map(activity => `<li>${activity}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="detail-item">
+        <i class="fas fa-map-marker-alt" style="margin-right: 6px; color: #2c7be5;"></i>
+        <a href="${excursion.location_url}" target="_blank" class="location-link">Ver ubicación</a>
+      </div>
+    </div>
+    ${priceHTML}
+    <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="whatsapp-button">
+      <i class="fab fa-whatsapp"></i> Reservar por WhatsApp
+    </a>
+  </div>
+  
     return card;
   };
 
