@@ -3,20 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <title>Editar Excursión</title>
-  <style>
-    body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
-    form { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; }
-    label { display: block; margin-top: 10px; }
-    input, textarea, select { width: 100%; padding: 8px; margin-top: 4px; }
-    button { margin-top: 20px; padding: 10px 20px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    button:hover { background: #218838; }
-    .card { background: white; padding: 15px; margin: 10px auto; border-radius: 6px; box-shadow: 0 0 5px rgba(0,0,0,0.1); max-width: 600px; }
-    .confirm { background: #d4edda; color: #155724; padding: 10px; margin-top: 10px; border-radius: 4px; text-align: center; }
-  </style>
+  <link rel="stylesheet" href="assets/styles/editar.css">
 </head>
 <body>
   <h2>Editar excursión existente</h2>
-  <select id="excursion-selector"></select>
+  <select id="excursion-selector">
+  <option disabled selected>Selecciona una excursión</option>
+</select>
 
   <form id="edit-form">
     <input type="hidden" name="rowIndex" id="rowIndex">
@@ -61,9 +54,10 @@
         excursions = data;
         const selector = document.getElementById('excursion-selector');
         const cards = document.getElementById('excursion-cards');
-        selector.innerHTML = data.map((ex, i) =>
-          `<option value="${i}">${ex.name}</option>`
-        ).join('');
+        selector.innerHTML = `
+  <option disabled selected>Selecciona una excursión</option>
+  ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
+`;
         cards.innerHTML = data.map(ex => `
           <div class="card" id="excursion-${ex.rowIndex}">
             <h3>${ex.name}</h3>
