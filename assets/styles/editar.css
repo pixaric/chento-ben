@@ -98,3 +98,19 @@ button:hover {
   text-align: center;
   font-weight: 500;
 }
+#excursion-selector {
+  background-color: #e0f0ff; /* Fondo azul claro */
+  color: #2c7be5;            /* Texto azul */
+  padding: 10px;
+  border: 1px solid #b0d4f1;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  width: 100%;
+  margin-bottom: 1rem;
+  transition: background 0.3s ease;
+}
+
+#excursion-selector:hover {
+  background-color: #cce4ff;
+}
