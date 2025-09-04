@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span>${excursion.schedule}</span>
           </div>
           <div class="detail-item">
-            <i class="fas fa-tasks"></i>
+            <i class="fas fa-tasks" style="margin-right: 10px;"></i>
             <ul class="activities-list">
               ${excursion.activities.map(activity => `<li>${activity}</li>`).join('')}
             </ul>
