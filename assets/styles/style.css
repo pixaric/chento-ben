@@ -147,8 +147,11 @@ main h2 {
     position: absolute;
     top: 15px;
     left: -8px;
-    background: linear-gradient(45deg, var(--secondary-color), var(--secondary-hover));
-    color: white;
+    /*background: linear-gradient(45deg, var(--light-green), var(--secondary-hover));
+    color: white;*/
+    background-color: #f4c542;
+color: #333;
+
     padding: 5px 15px 5px 20px;
     font-size: 0.8rem;
     font-weight: 700;
