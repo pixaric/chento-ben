@@ -37,15 +37,17 @@
 </label>
     <label>Horario:<input type="text" name="schedule" id="schedule"></label>
     <label>Actividades:<input type="text" name="activities" id="activities"></label>
-    <label>Latitud:<input type="text" name="origin_lat" id="origin_lat"></label>
-    <label>Longitud:<input type="text" name="origin_lng" id="origin_lng"></label>
+
+    <label>Ubicación (Google Maps):<input type="text" name="location_url" id="location_url"></label>
+
+
     <button type="submit">Guardar cambios</button>
   </form>
 
   
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbyn6G7txxJN7-1aYkB3vlTt412qpYWGnAkizciPRMNwNs3DJUbIMcerf3LBXJ-u6ZwJ/exec';
+    const API_URL = 'https://script.google.com/macros/s/AKfycbytbJaq7xFblcFv-tqWzcFR03SF2CjMoOdz6yqDQNdoAe1l_TpdxCDSlbjcgHPQGzYw/exec';
     let excursions = [];
 
     fetch(API_URL)
@@ -79,8 +81,8 @@
       document.getElementById('recommended').value = String(excursion.recommended);
       document.getElementById('schedule').value = excursion.schedule;
       document.getElementById('activities').value = excursion.activities;
-      document.getElementById('origin_lat').value = excursion.origin_lat;
-      document.getElementById('origin_lng').value = excursion.origin_lng;
+      document.getElementById('location_url').value = excursion.location_url || "";
+
     });
 
     document.getElementById('edit-form').addEventListener('submit', function(e) {

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let excursions = [];
 
   // --- CARGAR EXCURSIONES DESDE GOOGLE SHEETS API ---
-  fetch('https://script.google.com/macros/s/AKfycbyn6G7txxJN7-1aYkB3vlTt412qpYWGnAkizciPRMNwNs3DJUbIMcerf3LBXJ-u6ZwJ/exec')
+  fetch('https://script.google.com/macros/s/AKfycbytbJaq7xFblcFv-tqWzcFR03SF2CjMoOdz6yqDQNdoAe1l_TpdxCDSlbjcgHPQGzYw/exec')
     .then(response => response.json())
     .then(data => {
       excursions = data.map(item => ({
@@ -85,9 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </ul>
           </div>
           <div class="detail-item">
-            <a href="${mapLink}" target="_blank" rel="noopener noreferrer" class="map-link">
-              <i class="fas fa-directions"></i> Cómo llegar al punto de inicio
-            </a>
+            <a href="${excursion.location_url}" target="_blank">Ver ubicación</a>
           </div>
         </div>
         ${priceHTML}
