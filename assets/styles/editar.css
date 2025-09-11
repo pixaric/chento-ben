@@ -114,3 +114,6 @@ button:hover {
 #excursion-selector:hover {
   background-color: #cce4ff;
 }
+select option {
+  text-transform: capitalize;
+}
