@@ -44,7 +44,7 @@
             text-align: center;
         }
 
-        /* Contenedor Principal y Puerta de Acceso */
+        /* Contenedor Principal */
         .container {
             width: 100%;
             max-width: 900px;
@@ -60,22 +60,41 @@
             width: 100%;
         }
 
-        /* Selector de Excursiones */
+        /* Selector de Excursiones (Mejorado con Wrapper) */
+        .input-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+        
         #excursion-selector {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px 40px 12px 15px; /* Añadir espacio para la flecha */
             border: 2px solid var(--primary-color);
             border-radius: var(--border-radius);
             font-size: 1em;
-            margin-bottom: 25px;
-            appearance: none;
+            appearance: none; /* Eliminar la flecha nativa */
             background-color: #fff;
             cursor: pointer;
             transition: border-color 0.3s;
+            margin-bottom: 0; /* Lo gestiona el wrapper */
         }
         #excursion-selector:focus {
             outline: none;
             border-color: var(--primary-dark);
+        }
+
+        /* Flecha personalizada para el selector */
+        .input-wrapper::after {
+            content: '▼';
+            position: absolute;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            color: var(--primary-dark);
+            font-size: 0.8em;
+            pointer-events: none;
+            transition: transform 0.3s;
         }
 
         /* Formulario de Edición */
@@ -94,11 +113,12 @@
             font-weight: 600;
             font-size: 0.95em;
             color: var(--text-dark);
+            text-align: left; /* Asegurar alineación izquierda en la cuadrícula */
         }
 
         input[type="text"],
         input[type="number"],
-        input[type="password"], /* Estilo para el campo de contraseña */
+        input[type="password"],
         textarea,
         select {
             padding: 10px 12px;
@@ -124,10 +144,10 @@
             min-height: 100px;
         }
 
-        /* Botón de Guardar */
+        /* Botones */
         #edit-form button[type="submit"],
         #login-form button[type="submit"] {
-            grid-column: 1 / -1; /* Ocupar todo el ancho */
+            grid-column: 1 / -1; 
             padding: 15px 20px;
             background-color: var(--success-color);
             color: white;
@@ -221,18 +241,48 @@
             font-size: 1.4em;
             margin-bottom: 5px;
         }
-
-        .card p {
-            margin: 5px 0;
-            color: #555;
-            font-size: 0.95em;
-        }
         
-        .card p:nth-of-type(2) {
-            font-weight: 700;
-            color: var(--success-color);
+        /* --- ESTILOS DE VISTA RÁPIDA (NUEVOS) --- */
+        .price-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0 5px;
         }
 
+        .current-price {
+            font-size: 1.2em;
+            font-weight: 800;
+            color: var(--success-color); /* Color para el precio actual */
+        }
+
+        .original-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 0.9em;
+            white-space: nowrap; /* Evita que el precio tachado se rompa */
+        }
+
+        .discount-badge {
+            background-color: var(--error-color); /* Rojo para el descuento */
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.8em;
+            white-space: nowrap;
+        }
+
+        .schedule-time {
+            margin: 5px 0;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #eee;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        /* Fin de estilos nuevos */
+        
         /* Adaptación móvil */
         @media (max-width: 600px) {
             body {
@@ -243,6 +293,9 @@
             }
             #edit-form {
                 grid-template-columns: 1fr;
+            }
+            .price-info {
+                flex-wrap: wrap; /* Asegura que no se desborden en móvil */
             }
         }
     </style>
@@ -267,9 +320,11 @@
         <div class="container">
             <h2>✏️ Editar Excursión Existente</h2>
             
-            <select id="excursion-selector" aria-label="Selecciona una excursión">
-                <option disabled selected>Selecciona una excursión</option>
-            </select>
+            <div class="input-wrapper">
+                <select id="excursion-selector" aria-label="Selecciona una excursión">
+                    <option disabled selected>Selecciona una excursión</option>
+                </select>
+            </div>
 
             <form id="edit-form">
                 <input type="hidden" name="rowIndex" id="rowIndex">
@@ -336,15 +391,16 @@
             </div>
         </div>
     </div>
-  
-  <script>
+ 
+<script>
     (function() {
         'use strict';
-        // ATENCIÓN DE SEGURIDAD: La clave real debe validarse en Google Apps Script. 
-        // Esta es solo una barrera de acceso inicial en el cliente.
-        const VALID_CLIENT_TOKEN = 'ADMIN_TOKEN_123'; // ¡CAMBIA ESTO!
+        // 🚨 ATENCIÓN DE SEGURIDAD: Esta clave NO es la seguridad real.
+        // Es una barrera en el cliente (lado del navegador) para el acceso a la UI. 
+        // La validación REAL y SECRETA del token debe ocurrir SIEMPRE en Google Apps Script (lado del servidor).
+        const VALID_CLIENT_TOKEN = 'A123'; 
         
-        const BASE_API_URL = 'https://script.google.com/macros/s/AKfycbwI31lU3a-Qz0TrHDfpCCJy_wvEE3FM1OqOu-hzlvGVep3KLTcE6eCQRh8YbaeJgGA-/execc';
+        const BASE_API_URL = 'https://script.google.com/macros/s/AKfycbyU-S0cbmK5fIXn9sJUlsGz61bK3IWwbY8hvmhma-ls4ZxYa-lh0W_o1zsr5BRFUCgS/exec';
         let excursions = [];
         let authenticatedToken = ''; // Token que se enviará con todas las peticiones
 
@@ -364,6 +420,14 @@
             // Construir la URL final con el token
             const finalUrl = new URL(url);
             finalUrl.searchParams.set('token', authenticatedToken);
+
+            // Si es POST y el cuerpo es FormData, mover los datos a los params para Apps Script
+            if (options.method === 'POST' && options.body instanceof URLSearchParams) {
+                options.body.forEach((value, key) => finalUrl.searchParams.set(key, value));
+                // Eliminar el body del POST ya que Apps Script espera todo en los parámetros GET/POST simple
+                delete options.body; 
+            }
+
 
             let lastError = null;
             for (let i = 0; i < 3; i++) { // Intentar hasta 3 veces
@@ -407,28 +471,70 @@
             }
         });
 
+        /**
+         * Genera el HTML para las tarjetas de vista rápida.
+         * Incluye: Nombre, Precio Original, Descuento y Horario.
+         * @param {Array<Object>} excursionsData - La lista de excursiones.
+         */
+        function renderExcursionCards(excursionsData) {
+            const cards = document.getElementById('excursion-cards');
+            
+            cards.innerHTML = excursionsData.map(ex => {
+                const price = parseFloat(ex.price || 0);
+                const originalPrice = parseFloat(ex.originalPrice || 0);
+                
+                let discountHtml = '';
+                let originalPriceHtml = '';
+                let currentPriceDisplay = `€${price.toFixed(2)}`;
+
+                if (originalPrice > price && originalPrice > 0) {
+                    const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
+                    discountHtml = `<span class="discount-badge">-${discount}%</span>`;
+                    originalPriceHtml = `<span class="original-price">Original: €${originalPrice.toFixed(2)}</span>`;
+                } else {
+                    // Si no hay descuento, mostramos el precio actual como texto simple.
+                    currentPriceDisplay = `Precio: €${price.toFixed(2)}`;
+                }
+                
+                const description = ex.description || 'Sin descripción.';
+                const schedule = ex.schedule || 'No especificado';
+
+                return `
+                    <div class="card" id="excursion-${ex.rowIndex}">
+                        <h3>${ex.name}</h3>
+                        
+                        <div class="price-info">
+                            ${originalPriceHtml}
+                            <span class="current-price">${originalPriceHtml ? 'Ahora:' : ''} ${currentPriceDisplay}</span>
+                            ${discountHtml}
+                        </div>
+
+                        <p class="schedule-time">🕒 Horario: ${schedule}</p>
+
+                        <p style="color: #666; font-size: 0.9em; margin-top: 10px;">
+                            ${description.length > 100 ? description.substring(0, 100).trim() + '...' : description}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+        
         // --- Lógica de Carga y Edición de Excursiones ---
         function loadExcursionData() {
             safeFetch(BASE_API_URL)
                 .then(res => res.json())
                 .then(data => {
-                    excursions = data;
+                    // El Apps Script devuelve un objeto con el campo 'data'
+                    excursions = data.data; 
                     const selector = document.getElementById('excursion-selector');
-                    const cards = document.getElementById('excursion-cards');
                     
                     // Generar opciones del selector
                     selector.innerHTML = `
         <option disabled selected>Selecciona una excursión</option>
-        ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
+        ${excursions.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
     `;
                     // Generar tarjetas de vista rápida
-                    cards.innerHTML = data.map(ex => `
-                      <div class="card" id="excursion-${ex.rowIndex}">
-                        <h3>${ex.name}</h3>
-                        <p>${ex.description}</p>
-                        <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
-                      </div>
-                    `).join('');
+                    renderExcursionCards(excursions);
                 })
                 .catch(err => {
                     console.error("Error al cargar datos iniciales:", err);
@@ -467,27 +573,34 @@
             submitButton.textContent = 'Guardando...';
 
             const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => data[key] = value);
+            const data = new URLSearchParams(); // Usar URLSearchParams para enviar datos a Apps Script
             
-            // ATENCIÓN: El token ya está en 'data' gracias al campo hidden #securityTokenField
+            // Construir objeto para actualizar la lista localmente
+            const updatedExcursion = {};
+            formData.forEach((value, key) => {
+                data.append(key, value);
+                updatedExcursion[key] = value;
+            });
+            
+            // El token ya está en 'data' gracias al campo hidden #securityTokenField
 
             // Usar safeFetch para el envío de datos
             safeFetch(BASE_API_URL, {
                 method: 'POST',
-                body: new URLSearchParams(data)
+                // El cuerpo del POST no se usa directamente, sino que se adjunta a los URLSearchParams
+                body: data 
             })
             .then(res => res.text())
             .then(msg => {
-                // Si el Apps Script valida el token, la actualización procede.
-                // Si el Apps Script rechaza el token, debería devolver un error HTTP (capturado en catch).
-
-                // Actualizar la tarjeta de vista previa
-                const card = document.getElementById(`excursion-${data.rowIndex}`);
-                if (card) {
-                    card.querySelector('h3').textContent = data.name;
-                    card.querySelector('p:nth-of-type(1)').textContent = data.description;
-                    card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${parseFloat(data.price || 0).toFixed(2)}`;
+                // Encontrar y actualizar el objeto en la lista 'excursions'
+                const rowIndex = parseInt(formData.get('rowIndex'));
+                const localIndex = excursions.findIndex(ex => parseInt(ex.rowIndex) === rowIndex);
+                
+                if (localIndex !== -1) {
+                    // Combinar datos existentes con los actualizados del formulario
+                    excursions[localIndex] = { ...excursions[localIndex], ...updatedExcursion };
+                    // Volver a renderizar las tarjetas para reflejar los cambios
+                    renderExcursionCards(excursions); 
                 }
 
                 // Mostrar mensaje de éxito
@@ -512,6 +625,6 @@
             });
         });
     })();
-  </script>
+</script>
 </body>
 </html>
