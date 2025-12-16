@@ -10,7 +10,434 @@
   <h2>Editar excursión existente</h2>
 <select id="excursion-selector" aria-label="Selecciona una excursión">
 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Excursiones (Edición API Script)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Variables y Estilos Generales */
+        :root {
+            --primary-color: #3498db; /* Azul vibrante */
+            --primary-dark: #2980b9;
+            --success-color: #2ecc71; /* Verde éxito */
+            --error-color: #e74c3c; /* Rojo error */
+            --text-dark: #333;
+            --background-light: #f4f7f9;
+            --card-background: #ffffff;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 10px;
+        }
 
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-light);
+            color: var(--text-dark);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: var(--primary-dark);
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 5px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Contenedor Principal */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: var(--card-background);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+        }
+
+        /* Selector de Excursiones */
+        #excursion-selector {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--primary-color);
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            margin-bottom: 25px;
+            appearance: none;
+            background-color: #fff;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        #excursion-selector:focus {
+            outline: none;
+            border-color: var(--primary-dark);
+        }
+
+        /* Formulario de Edición */
+        #edit-form {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+            border-top: 1px dashed #ccc;
+            margin-top: 20px;
+        }
+
+        label {
+            display: flex;
+            flex-direction: column;
+            font-weight: 600;
+            font-size: 0.95em;
+            color: var(--text-dark);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            padding: 10px 12px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: var(--background-light);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+            background-color: var(--card-background);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Botón de Guardar */
+        #edit-form button[type="submit"] {
+            grid-column: 1 / -1; /* Ocupar todo el ancho */
+            padding: 15px 20px;
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
+            margin-top: 10px;
+        }
+
+        #edit-form button[type="submit"]:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(46, 204, 113, 0.4);
+        }
+
+        /* Mensajes de Confirmación/Error */
+        .confirm, .error-msg {
+            grid-column: 1 / -1;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            font-weight: 700;
+            text-align: center;
+            margin-top: 20px;
+            transition: opacity 0.3s;
+        }
+        .confirm {
+            background-color: #e8f9f1;
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        .error-msg {
+            background-color: #fcebeb;
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        /* Contenedor de Tarjetas de Previsualización */
+        .cards-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 30px;
+            background-color: var(--card-background);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+        }
+
+        .cards-section h2 {
+            border-color: var(--text-dark);
+            color: var(--text-dark);
+        }
+        
+        #excursion-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .card {
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 5px solid var(--primary-color);
+            background-color: #fff;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card h3 {
+            color: var(--primary-dark);
+            margin-top: 0;
+            font-size: 1.4em;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 0.95em;
+        }
+        
+        .card p:nth-of-type(2) {
+            font-weight: 700;
+            color: var(--success-color);
+        }
+
+        /* Adaptación móvil */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container, .cards-section {
+                padding: 20px;
+            }
+            #edit-form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>✏️ Editar Excursión Existente</h2>
+        
+        <select id="excursion-selector" aria-label="Selecciona una excursión">
+            <option disabled selected>Selecciona una excursión</option>
+        </select>
+
+        <form id="edit-form">
+            <input type="hidden" name="rowIndex" id="rowIndex">
+            
+            <label>Nombre:
+                <input type="text" name="name" id="name" required placeholder="Nombre de la excursión">
+            </label>
+            
+            <label>Descripción:
+                <textarea name="description" id="description" required placeholder="Descripción detallada de la actividad"></textarea>
+            </label>
+            
+            <label>Categoría:
+                <select name="category" id="category" required>
+                    <option value="">-- Selecciona Categoría --</option>
+                    <option value="barco">⛵ Barco</option>
+                    <option value="buggy">🚜 Buggy</option>
+                    <option value="excursiones">🚶 Excursiones</option>
+                    <option value="jetcor">🛥️ Jetcor</option>
+                    <option value="jetsky">🚤 Jetsky</option>
+                    <option value="movilite">🛴 Movilite</option>
+                    <option value="quad">🏍️ Quad</option>
+                    <option value="velero">⚓ Velero</option>
+                </select>
+            </label>
+            
+            <label>Precio (€):
+                <input type="number" name="price" id="price" required placeholder="Ej: 50.00">
+            </label>
+            
+            <label>Precio original (€) (Opcional):
+                <input type="number" name="originalPrice" id="originalPrice" placeholder="Ej: 75.00">
+            </label>
+            
+            <label>¿Recomendado?:
+                <select name="recommended" id="recommended">
+                    <option value="false">No ❌</option>
+                    <option value="true">Sí ✅</option>
+                </select>
+            </label>
+            
+            <label>Horario:
+                <input type="text" name="schedule" id="schedule" placeholder="Ej: Mañanas (10:00h) y Tardes (16:00h)">
+            </label>
+            
+            <label>Actividades:
+                <input type="text" name="activities" id="activities" placeholder="Lista de actividades separadas por coma">
+            </label>
+
+            <label>Ubicación (URL de Google Maps):
+                <input type="text" name="location_url" id="location_url" placeholder="URL completa de Google Maps">
+            </label>
+
+            <button type="submit">💾 Guardar Cambios</button>
+        </form>
+    </div>
+
+    <!-- Sección de Previsualización (Añadida para renderizar las "cards" que JS intenta llenar) -->
+    <div class="cards-section">
+        <h2>Vista Rápida de Excursiones</h2>
+        <div id="excursion-cards">
+            <!-- Las tarjetas se cargarán aquí -->
+        </div>
+    </div>
+  
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbwdU3utUB2HKX9M2eKEsIvAiOG0JgDIGzx7m7Smry5WpfxSaFjBKeNJj7BORHk5Lreh/exec';
+    let excursions = [];
+
+    // Función para manejar las solicitudes de fetch con reintentos
+    async function safeFetch(url, options = {}) {
+        let lastError = null;
+        for (let i = 0; i < 3; i++) { // Intentar hasta 3 veces
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response;
+            } catch (error) {
+                lastError = error;
+                // Espera exponencial: 1s, 2s, 4s (incluyendo el caso donde i=0 -> 1s)
+                const delay = Math.pow(2, i) * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+        throw new Error(`Falló la solicitud después de múltiples reintentos: ${lastError.message}`);
+    }
+
+
+    safeFetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        excursions = data;
+        const selector = document.getElementById('excursion-selector');
+        const cards = document.getElementById('excursion-cards');
+        
+        // Generar opciones del selector
+        selector.innerHTML = `
+  <option disabled selected>Selecciona una excursión</option>
+  ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
+`;
+        // Generar tarjetas de vista rápida
+        cards.innerHTML = data.map(ex => `
+          <div class="card" id="excursion-${ex.rowIndex}">
+            <h3>${ex.name}</h3>
+            <p>${ex.description}</p>
+            <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
+          </div>
+        `).join('');
+      })
+      .catch(err => {
+          console.error("Error al cargar datos iniciales:", err);
+          document.getElementById('excursion-cards').innerHTML = '<p class="error-msg" style="grid-column: 1 / -1; margin: 0; display: block;">❌ No se pudieron cargar las excursiones desde la API.</p>';
+      });
+
+    document.getElementById('excursion-selector').addEventListener('change', (e) => {
+      const index = e.target.value;
+      const excursion = excursions[index];
+      
+      // Verificar si hay una excursión seleccionada
+      if (excursion) {
+          document.getElementById('rowIndex').value = excursion.rowIndex;
+          document.getElementById('name').value = excursion.name;
+          document.getElementById('description').value = excursion.description;
+          document.getElementById('category').value = excursion.category || "";
+          document.getElementById('price').value = excursion.price;
+          document.getElementById('originalPrice').value = excursion.originalPrice;
+          document.getElementById('recommended').value = String(excursion.recommended).toLowerCase() === 'true' ? 'true' : 'false';
+          document.getElementById('schedule').value = excursion.schedule;
+          document.getElementById('activities').value = excursion.activities;
+          document.getElementById('location_url').value = excursion.location_url || "";
+      }
+    });
+
+    document.getElementById('edit-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      // Limpiar mensajes anteriores
+      form.querySelectorAll('.confirm, .error-msg').forEach(el => el.remove());
+      submitButton.disabled = true;
+      submitButton.textContent = 'Guardando...';
+
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
+
+      // Usar safeFetch para el envío de datos
+      safeFetch(API_URL, {
+        method: 'POST',
+        body: new URLSearchParams(data)
+      })
+      .then(res => res.text())
+      .then(msg => {
+        
+          // Actualizar la tarjeta de vista previa
+          const card = document.getElementById(`excursion-${data.rowIndex}`);
+          if (card) {
+            card.querySelector('h3').textContent = data.name;
+            card.querySelector('p:nth-of-type(1)').textContent = data.description;
+            card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${parseFloat(data.price || 0).toFixed(2)}`;
+          }
+
+          // Mostrar mensaje de éxito
+          const confirm = document.createElement('div');
+          confirm.className = 'confirm';
+          confirm.textContent = "✅ Excursión actualizada correctamente";
+          form.appendChild(confirm);
+          setTimeout(() => confirm.remove(), 3000);
+      })
+      .catch(err => {
+        console.error("Error al actualizar:", err);
+        // Reemplazo de alert() con un mensaje en el DOM
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'error-msg';
+        errorMsg.textContent = "❌ Error al guardar los cambios. Verifique la consola.";
+        form.appendChild(errorMsg);
+        setTimeout(() => errorMsg.remove(), 5000);
+      })
+      .finally(() => {
+          submitButton.disabled = false;
+          submitButton.textContent = '💾 Guardar Cambios';
+      });
+    });
+  </script>
+</body>
+</html>
   <option disabled selected>Selecciona una excursión</option>
 </select>
 
