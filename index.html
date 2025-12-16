@@ -1,53 +1,743 @@
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chento-Ben | Excursiones & Aventuras</title>
-    <link rel="stylesheet" href="assets/styles/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Catálogo Dinámico de Excursiones</title>
+    <!-- Carga Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Iconos de Lucide React, aunque se usan solo como referencia, el navegador lo entiende -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Fondo ligeramente más azulado */
+        }
+        .card-shadow {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card-shadow:hover {
+            transform: translateY(-8px); /* Elevación más pronunciada */
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .recommended-badge {
+            /* Estilo con nuevo color naranja/amarillo */
+            background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%); /* orange-500 a amber-400 */
+            border: 2px solid white; 
+            padding: 4px 10px;
+            letter-spacing: 0.05em;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        /* Estilo para el Badge de Descuento */
+        .discount-badge {
+            background-color: #ef4444; /* Rojo para destacar el descuento */
+            color: white;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 9999px; /* Fully rounded */
+            font-size: 0.75rem;
+            line-height: 1rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .input-style {
+            /* Cambio de sky a indigo para el foco */
+            @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500;
+        }
+        .btn-primary {
+            /* Cambio a indigo como color primario */
+            @apply px-6 py-3 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition duration-300;
+        }
+        .btn-secondary {
+            @apply px-4 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-gray-300 transition duration-300;
+        }
+        .whatsapp-btn {
+            /* ESTILO MEJORADO: Verde aún más llamativo, vibrante y con mayor profundidad/efecto */
+            @apply bg-green-600 text-white transition duration-300 flex items-center justify-center p-3 rounded-xl shadow-2xl font-bold uppercase tracking-widest 
+                   ring-8 ring-green-400/50;
+            /* Aumentamos la animación al pasar el ratón para hacerlo más juguetón */
+            transition: all 0.3s ease-in-out;
+            transform: scale(1.02); /* Ligeramente más grande por defecto */
+        }
+        .whatsapp-btn:hover {
+             @apply bg-green-700 ring-green-500/80;
+             transform: scale(1.05); /* Se agranda más al pasar el ratón */
+        }
+        .whatsapp-btn:active {
+            transform: scale(0.98);
+        }
+        
+        /* Estilo para el menú desplegable lateral (Drawer/Off-Canvas) */
+        #mobile-menu-drawer {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%); /* Oculto por defecto */
+        }
+        #mobile-menu-drawer.open {
+            transform: translateX(0); /* Visible */
+        }
+        #mobile-menu-overlay.open {
+            display: block;
+        }
+    </style>
 </head>
-<body>
-    <header>
-        <h1 class="brand-name">Chento-Ben</h1>
-        <p>Vive la aventura, crea tu historia. ¡Contáctanos y empieza a explorar!</p>
-    </header>
+<body class="min-h-screen">
 
-    <main>
-        <section id="recommended-section">
-            <h2>Recomendados para ti</h2>
-            <div id="recommended-container" class="excursions-grid">
-                <!-- Recommended cards will be inserted here by JavaScript -->
+    <!-- BARRA DE NAVEGACIÓN (Responsive) -->
+    <nav class="bg-white shadow-lg sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo/Nombre de la Marca -->
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-bold text-indigo-600">TravelCatalog</a>
+                </div>
+                
+                <!-- Enlaces de Navegación (Ocultos en móvil, mostrados en md y superior) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#catalogo" class="text-gray-900 font-medium hover:text-indigo-600 transition duration-150">Catálogo</a>
+                    <a href="#" class="text-gray-600 hover:text-indigo-600 transition duration-150">Quienes Somos</a>
+                    <!-- Botón que abre el modal de login -->
+                    <button onclick="openLoginModal()" class="btn-primary py-2 px-4 text-sm bg-orange-500 hover:bg-orange-600">
+                        <span id="login-text">Acceso Admin</span>
+                    </button>
+                </div>
+                
+                <!-- Botón de menú para móvil -->
+                <button class="md:hidden text-gray-500 hover:text-indigo-600 p-2" onclick="toggleMenu()">
+                    <!-- Icono de menú (Hamburger) -->
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
             </div>
-        </section>
-
-        <section id="excursions-section">
-            <div class="filter-container" id="filter-container">
-                 <!-- Filter buttons will be inserted here by JavaScript -->
-            </div>
-            <h2>Nuestras Excursiones</h2>
-            <div id="excursions-container" class="excursions-grid">
-                <!-- Las tarjetas de excursiones se insertarán aquí por JavaScript -->
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <div class="social-media">
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
         </div>
-        <p>&copy; 2024 Chento-Ben. Todos los derechos reservados.</p>
-    </footer>
+    </nav>
+    
+    <!-- MOBILE MENU DRAWER (Desplegable Lateral) -->
+    <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden" onclick="toggleMenu()"></div>
+    <div id="mobile-menu-drawer" class="fixed top-0 left-0 w-64 h-full bg-white z-50 shadow-2xl p-6 md:hidden">
+        
+        <div class="flex justify-between items-center mb-6 border-b pb-3">
+             <h3 class="text-xl font-bold text-indigo-600">Menú</h3>
+             <!-- Botón para cerrar el menú -->
+             <button class="text-gray-500 hover:text-gray-800" onclick="toggleMenu()">
+                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+             </button>
+        </div>
 
-    <a href="https://wa.me/5491112345678" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+        <nav class="flex flex-col space-y-4">
+            <a href="#catalogo" onclick="toggleMenu()" class="text-lg text-gray-800 font-medium hover:text-indigo-600 transition duration-150 p-2 rounded-lg hover:bg-gray-100">Catálogo</a>
+            <a href="#" onclick="toggleMenu()" class="text-lg text-gray-800 font-medium hover:text-indigo-600 transition duration-150 p-2 rounded-lg hover:bg-gray-100">Quienes Somos</a>
+            <div class="pt-4">
+                 <!-- Botón de Acceso en Móvil -->
+                 <button onclick="openLoginModal(); toggleMenu();" class="btn-primary w-full text-center bg-orange-500 hover:bg-orange-600">
+                    <span id="mobile-login-text">Acceso Admin</span>
+                 </button>
+            </div>
+        </nav>
+    </div>
+    <!-- FIN MOBILE MENU DRAWER -->
 
 
-    <script src="assets/js/script.js"></script>
+    <!-- Contenedor Principal de la Aplicación (Responsive Padding) -->
+    <div id="app" class="p-4 md:p-8 max-w-7xl mx-auto">
+        
+        <!-- SECCIÓN 1: EXCURSIONES RECOMENDADAS -->
+        <section id="recommended-section" class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-6 border-b-4 border-orange-500 inline-block pb-1">
+                ⭐ Ofertas Recomendadas
+            </h2>
+            <!-- Grid responsive para recomendadas -->
+            <div id="recommended-tour-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <!-- Las tarjetas de excursiones recomendadas se insertarán aquí -->
+            </div>
+            <!-- Mensaje si no hay recomendadas -->
+            <p id="no-recommended-message" class="text-center text-gray-500 p-8 hidden border border-dashed rounded-xl mt-6 text-sm md:text-base">
+                Actualmente no hay excursiones marcadas como recomendadas.
+            </p>
+        </section>
+
+
+        <!-- SECCIÓN 2: CATÁLOGO COMPLETO -->
+        <header id="catalogo" class="mb-8 text-center pt-8">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Catálogo Completo de Excursiones</h1>
+            <p class="text-gray-600 text-sm md:text-base">Gestiona y visualiza dinámicamente todas las ofertas de viaje.</p>
+        </header>
+
+        <!-- Filtro de Categoría -->
+        <div class="mb-8 flex justify-center px-4">
+            <select id="category-filter" class="input-style max-w-sm" onchange="filterTours()">
+                <option value="all">Todas las Categorías</option>
+                <!-- Opciones se insertarán aquí por JS -->
+            </select>
+        </div>
+
+        <!-- Barra de estado / Indicador de Carga -->
+        <div id="loading-indicator" class="flex items-center justify-center p-4" style="display:none;">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mr-3"></div>
+            <span class="text-indigo-600 font-medium">Cargando datos...</span>
+        </div>
+
+        <!-- Mensajes de Error/Éxito -->
+        <div id="message-container" class="fixed top-20 right-4 z-50"></div> <!-- Ajustado top para Navbar -->
+
+        <!-- Contenedor de Excursiones (Grid Responsive) -->
+        <div id="tour-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <!-- Las tarjetas de excursiones se insertarán aquí -->
+        </div>
+
+        <!-- MODAL DE ACCESO (LOGIN) -->
+        <div id="login-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden">
+            <div class="bg-white rounded-xl card-shadow w-full max-w-sm p-6 md:p-8 relative">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Acceso de Administrador</h2>
+                
+                <form id="login-form">
+                    <div class="mb-4">
+                        <label for="admin-token" class="block text-sm font-medium text-gray-700 mb-1">Clave de Acceso (Token)</label>
+                        <input type="password" id="admin-token" name="admin-token" required class="input-style" placeholder="Introduce la clave secreta">
+                    </div>
+                    
+                    <!-- Mensaje de error de login -->
+                    <p id="login-error-message" class="text-sm text-red-500 mb-4 hidden">Token incorrecto. Intenta de nuevo.</p>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex justify-end space-x-3 mt-4">
+                        <button type="button" onclick="closeLoginModal()" class="btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn-primary">Acceder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- FIN MODAL DE ACCESO -->
+
+
+        <!-- Modal de Edición (Oculto por defecto) -->
+        <div id="edit-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay hidden">
+            <!-- El modal es responsive gracias a max-w-xl y padding -->
+            <div class="bg-white rounded-xl card-shadow w-full max-w-xl p-6 md:p-8 relative max-h-[95vh] overflow-y-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Editar Excursión</h2>
+                
+                <form id="edit-form">
+                    <input type="hidden" id="edit-rowIndex">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <!-- Nombre -->
+                        <div>
+                            <label for="edit-name" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                            <input type="text" id="edit-name" name="name" required class="input-style">
+                        </div>
+                        <!-- Categoría (SELECT) -->
+                        <div>
+                            <label for="edit-category" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                            <select id="edit-category" name="category" required class="input-style">
+                                <!-- Las opciones se cargarán dinámicamente -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="mb-4">
+                        <label for="edit-description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                        <textarea id="edit-description" name="description" rows="3" required class="input-style"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <!-- Precio -->
+                        <div>
+                            <label for="edit-price" class="block text-sm font-medium text-gray-700 mb-1">Precio ($)</label>
+                            <input type="number" id="edit-price" name="price" required class="input-style">
+                        </div>
+                        <!-- Precio Original (Opcional) -->
+                        <div>
+                            <label for="edit-originalPrice" class="block text-sm font-medium text-gray-700 mb-1">Precio Original ($)</label>
+                            <input type="number" id="edit-originalPrice" name="originalPrice" class="input-style">
+                        </div>
+                    </div>
+                    
+                    <!-- Schedule -->
+                    <div class="mb-4">
+                        <label for="edit-schedule" class="block text-sm font-medium text-gray-700 mb-1">Horario / Duración</label>
+                        <input type="text" id="edit-schedule" name="schedule" class="input-style">
+                    </div>
+
+                    <!-- Activities -->
+                    <div class="mb-4">
+                        <label for="edit-activities" class="block text-sm font-medium text-gray-700 mb-1">Actividades (separadas por coma)</label>
+                        <input type="text" id="edit-activities" name="activities" placeholder="Ej: Snorkel, Buceo, Playa" class="input-style">
+                    </div>
+
+                    <!-- Recommended & Location URL -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-center">
+                        <!-- Recommended Checkbox -->
+                        <div class="flex items-center">
+                            <input type="checkbox" id="edit-recommended" name="recommended" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                            <label for="edit-recommended" class="ml-2 block text-sm font-medium text-gray-700">Recomendado</label>
+                        </div>
+                        <!-- Location URL -->
+                        <div>
+                            <label for="edit-location_url" class="block text-sm font-medium text-gray-700 mb-1">URL de Ubicación (Maps)</label>
+                            <input type="url" id="edit-location_url" name="location_url" class="input-style text-sm" placeholder="https://maps.google.com/...">
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex justify-end space-x-3 mt-4">
+                        <button type="button" onclick="closeModal()" class="btn-secondary">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar Cambios</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // 1. CONFIGURACIÓN
+        // URL de la aplicación web de Google Apps Script (Tu implementación)
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwIUljgtatp5IaZSyD4IUQQX9lKZ_vXxacDtf34CJFiQXT0X990Bf8upR20jezvPdnb/exec';
+        
+        // --- INICIO DE MÓDULO DE CONFIGURACIÓN SIMULADO ---
+        /** * Obtiene la clave de administrador. 
+         * * NOTA: Debido a la restricción de un solo archivo, esta clave debe estar hardcodeada. 
+         * En una aplicación real, esto se cargaría de forma segura desde un backend o variable de entorno.
+         */
+        function getAdminToken() {
+            // Clave secreta para el acceso de administrador (¡Cambia esto!)
+            return 'Admin123'; 
+        }
+        // --- FIN DE MÓDULO DE CONFIGURACIÓN SIMULADO ---
+        
+        // Estado de autenticación
+        let isLoggedIn = false;
+        
+        // DOM Elements
+        const tourListContainer = document.getElementById('tour-list-container');
+        const recommendedTourList = document.getElementById('recommended-tour-list');
+        const noRecommendedMessage = document.getElementById('no-recommended-message');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const messageContainer = document.getElementById('message-container');
+        const editModal = document.getElementById('edit-modal');
+        const editForm = document.getElementById('edit-form');
+        const categoryFilter = document.getElementById('category-filter'); 
+        
+        // Elementos del menú móvil
+        const mobileMenuDrawer = document.getElementById('mobile-menu-drawer');
+        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+        
+        // Elementos del Login
+        const loginModal = document.getElementById('login-modal');
+        const loginForm = document.getElementById('login-form');
+        const loginErrorMessage = document.getElementById('login-error-message');
+        const loginTextDesktop = document.getElementById('login-text');
+        const loginTextMobile = document.getElementById('mobile-login-text');
+
+
+        let excursions = []; // Cache para almacenar TODOS los datos
+        let filteredExcursions = []; // Cache para los datos filtrados actualmente
+
+        // 2. UTILIDADES DE UI
+        
+        /** Muestra una notificación temporal. */
+        function showNotification(message, type = 'success') {
+            const colors = {
+                success: 'bg-green-500',
+                error: 'bg-red-500',
+                info: 'bg-blue-500'
+            };
+            
+            const alert = document.createElement('div');
+            alert.className = `p-4 mb-2 text-white rounded-lg shadow-lg transition-opacity duration-300 ${colors[type]}`;
+            alert.textContent = message;
+            
+            messageContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 3000);
+        }
+
+        /** Muestra u oculta el indicador de carga. */
+        function toggleLoading(show) {
+            loadingIndicator.style.display = show ? 'flex' : 'none';
+            tourListContainer.classList.toggle('opacity-50', show);
+            recommendedTourList.classList.toggle('opacity-50', show); 
+        }
+
+        /** Formatea un número como moneda USD. */
+        function formatCurrency(amount) {
+            const numericAmount = parseFloat(amount) || 0; 
+            return new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'USD' }).format(numericAmount);
+        }
+
+        /** Fallback para imágenes rotas o ausentes. */
+        function getImageUrl(url, fallbackText = 'Excursión') {
+            const safeText = fallbackText.replace(/[^a-zA-Z0-9]/g, ' ').trim() || 'Excursion';
+            return url && url.startsWith('http') ? url : `https://placehold.co/400x300/374151/f0f4f8?text=${safeText}`;
+        }
+        
+        /** * Calcula el porcentaje de descuento. */
+        function calculateDiscount(price, originalPrice) {
+            const current = parseFloat(price);
+            const original = parseFloat(originalPrice);
+
+            if (original > current && original > 0) {
+                const discount = ((original - current) / original) * 100;
+                // Redondea a la baja el porcentaje
+                return `${Math.floor(discount)}% OFF`;
+            }
+            return null;
+        }
+
+        /** Genera la URL de WhatsApp con un mensaje predefinido. */
+        function generateWhatsappLink(tourName, price) {
+            const message = `¡Hola! Me gustaría obtener más información sobre la excursión "${tourName}" que tiene un costo de ${formatCurrency(price)}. ¿Podrían darme más detalles?`;
+            // Número de teléfono en formato internacional sin el '+'
+            const phoneNumber = '34685464783'; 
+            const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+            return url;
+        }
+        
+        /** Maneja el despliegue del menú móvil. */
+        function toggleMenu() {
+            mobileMenuDrawer.classList.toggle('open');
+            mobileMenuOverlay.classList.toggle('open');
+            document.body.classList.toggle('overflow-hidden', mobileMenuDrawer.classList.contains('open'));
+        }
+        
+        /** Actualiza el texto del botón de acceso según el estado de login. */
+        function updateLoginButton() {
+            if (isLoggedIn) {
+                loginTextDesktop.textContent = 'Admin (Logueado)';
+                loginTextMobile.textContent = 'Admin (Logueado)';
+            } else {
+                loginTextDesktop.textContent = 'Acceso Admin';
+                loginTextMobile.textContent = 'Acceso Admin';
+            }
+        }
+
+        // 3. LÓGICA DE RENDERIZACIÓN Y FILTRADO
+
+        /** Renderiza una única tarjeta de excursión. */
+        function renderTourCard(tour, containerElement) {
+            const isDiscounted = tour.originalPrice > tour.price;
+            const discountBadge = calculateDiscount(tour.price, tour.originalPrice);
+            const whatsappLink = generateWhatsappLink(tour.name, tour.price);
+            
+            const card = document.createElement('div');
+            card.className = 'bg-white rounded-xl overflow-hidden card-shadow flex flex-col';
+            
+            // Determinar si mostrar el botón de edición
+            const editButton = isLoggedIn ? `
+                <button onclick="openEditModal(${tour.rowIndex})" class="btn-primary text-sm">Editar</button>
+            ` : '';
+            
+            // Determinar las clases de la cuadrícula de botones (si solo hay uno, que ocupe todo)
+            const buttonGridClass = isLoggedIn ? 'grid-cols-2' : 'grid-cols-1';
+
+            card.innerHTML = `
+                <div class="relative">
+                    <img src="${getImageUrl(tour.image, tour.name)}" 
+                         onerror="this.onerror=null; this.src='${getImageUrl(null, tour.name)}';"
+                         alt="Imagen de ${tour.name}" 
+                         class="w-full h-48 object-cover">
+                    <div class="absolute top-0 right-0 m-3 px-3 py-1 text-xs font-semibold text-white rounded-full bg-indigo-500/90">${tour.category}</div>
+                    
+                    ${tour.recommended ? `<div class="absolute top-0 left-0 m-3 px-3 py-1 text-xs font-bold text-gray-800 rounded-full recommended-badge">⭐ Recomendado</div>` : ''}
+
+                    ${discountBadge ? `<div class="absolute bottom-0 right-0 m-3 discount-badge">${discountBadge}</div>` : ''}
+                </div>
+                
+                <div class="p-5 flex flex-col flex-grow">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">${tour.name}</h3>
+                    <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">${tour.description}</p>
+                    
+                    <!-- Precios -->
+                    <div class="flex items-baseline space-x-2 mb-4">
+                        <span class="text-2xl font-extrabold text-indigo-600">${formatCurrency(tour.price)}</span>
+                        ${isDiscounted ? `<span class="text-sm text-gray-400 line-through">${formatCurrency(tour.originalPrice)}</span>` : ''}
+                    </div>
+
+                    <!-- Metadatos -->
+                    <div class="text-xs text-gray-500 mb-4">
+                        <p class="mb-1"><strong class="text-gray-700">Duración:</strong> ${tour.schedule || 'No especificado'}</p>
+                        <p><strong class="text-gray-700">Actividades:</strong> ${Array.isArray(tour.activities) ? tour.activities.join(', ') : tour.activities || 'N/A'}</p>
+                    </div>
+
+                    <!-- Botones de Acción (Responsive) -->
+                    <div class="grid ${buttonGridClass} gap-2 mt-auto">
+                        <!-- Botón WhatsApp -->
+                        <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" 
+                           class="whatsapp-btn text-sm ${isLoggedIn ? '' : 'col-span-full'}">
+                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.01 2.01C6.48 2.01 2 6.48 2 12.01c0 2.53.92 4.85 2.45 6.63L3.5 22.01l4.28-1.42c1.6.87 3.4 1.34 5.23 1.34 5.53 0 10.01-4.47 10.01-10.01S17.54 2.01 12.01 2.01zm3.17 12.44c-.16.4-.95.83-1.37.83-.43 0-.74-.18-1.55-.58-.81-.4-1.92-.95-2.27-1.07-.35-.12-.64-.18-1.02.18-.38.36-1.47 1.88-1.78 2.24-.31.35-.61.39-1.14.15-.53-.24-2.22-.81-3.69-3.41-1.47-2.6.21-3.99.31-4.18.1-.19.46-.24.71-.24.25 0 .4.04.58.07.18.03.4.08.66.62.26.54.74 1.8.8 1.93.06.13.1.2.03.32-.07.12-.46.19-.9.41-.44.22-.72.48-.98.74-.26.26-.54.58-.28 1.05.27.47.88 1.5.94 1.62.06.12.18.34.46.68.28.34.54.59.84.77.3.18.57.34.86.44.28.1.58.15.88.04.3-.11.96-.39 1.54-.92.58-.53 1.05-1.17 1.25-1.5.2-.33.24-.55.37-.8.13-.25.84.45 1.02.8.18.35.18.84.09 1.02z"/></svg>
+                            Consultar
+                        </a>
+                        <!-- Botón de Editar (SOLO si isLoggedIn es true) -->
+                        ${editButton}
+                    </div>
+                </div>
+            `;
+            containerElement.appendChild(card);
+        }
+
+        /** Renderiza una lista de excursiones. */
+        function renderTours(tours) {
+            tourListContainer.innerHTML = '';
+            
+            if (tours.length === 0) {
+                tourListContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 p-8 border border-dashed rounded-xl">No se encontraron excursiones que coincidan con el filtro.</p>';
+                return;
+            }
+            // Usa tourListContainer como el elemento contenedor por defecto
+            tours.forEach(tour => renderTourCard(tour, tourListContainer));
+        }
+        
+        /** Renderiza solo las excursiones recomendadas en su propia sección. */
+        function renderRecommendedTours() {
+            recommendedTourList.innerHTML = '';
+            noRecommendedMessage.classList.add('hidden'); // Ocultar por defecto
+
+            const recommended = excursions.filter(tour => tour.recommended);
+
+            if (recommended.length === 0) {
+                noRecommendedMessage.classList.remove('hidden');
+            } else {
+                // Usa recommendedTourList como el contenedor
+                recommended.forEach(tour => renderTourCard(tour, recommendedTourList));
+            }
+        }
+        
+        /** Popula el selector de categorías y las ordena. (Filtro Superior)*/
+        function populateFilters(tours) {
+            // Extrae categorías únicas, filtra nulos/vacíos y ordena alfabéticamente
+            const categories = [...new Set(tours.map(t => t.category).filter(c => c))].sort();
+            
+            categoryFilter.innerHTML = '<option value="all">Todas las Categorías</option>';
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categoryFilter.appendChild(option);
+            });
+        }
+        
+        /** Popula el selector de categorías del modal de edición. */
+        function populateEditCategoryDropdown(tours) {
+            // Usa Set para obtener categorías únicas
+            const categories = [...new Set(tours.map(t => t.category).filter(c => c))].sort();
+            
+            const editCategorySelect = document.getElementById('edit-category');
+            editCategorySelect.innerHTML = ''; // Limpiar opciones anteriores
+
+            if(categories.length === 0) {
+                 editCategorySelect.innerHTML = '<option value="">No hay categorías disponibles</option>';
+            }
+            
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                editCategorySelect.appendChild(option);
+            });
+        }
+
+
+        /** Filtra las excursiones basándose en la categoría seleccionada y renderiza. */
+        function filterTours() {
+            const selectedCategory = categoryFilter.value;
+            
+            if (selectedCategory === 'all') {
+                filteredExcursions = excursions;
+            } else {
+                filteredExcursions = excursions.filter(tour => tour.category === selectedCategory);
+            }
+            
+            renderTours(filteredExcursions);
+        }
+
+
+        // 4. LÓGICA DE MODALES (LOGIN y EDICIÓN)
+
+        /** Muestra el modal de Acceso (Login). */
+        function openLoginModal() {
+            loginModal.classList.remove('hidden');
+            loginErrorMessage.classList.add('hidden'); // Ocultar errores previos
+        }
+        
+        /** Oculta el modal de Acceso (Login). */
+        function closeLoginModal() {
+            loginModal.classList.add('hidden');
+            loginForm.reset();
+        }
+
+        /** Abre el modal de edición y carga los datos de la excursión. */
+        function openEditModal(rowIndex) {
+             // Solo permitir abrir el modal si está logueado
+            if (!isLoggedIn) {
+                showNotification('No tienes permisos para editar.', 'error');
+                return;
+            }
+            // Busca en el caché de todas las excursiones (no solo las filtradas)
+            const tour = excursions.find(t => t.rowIndex === rowIndex);
+            if (!tour) return showNotification('Excursión no encontrada.', 'error');
+
+            document.getElementById('edit-rowIndex').value = tour.rowIndex;
+            document.getElementById('edit-name').value = tour.name;
+            document.getElementById('edit-description').value = tour.description;
+            // Configura el valor del SELECT de categoría (debe estar populado antes de esto)
+            document.getElementById('edit-category').value = tour.category; 
+            document.getElementById('edit-price').value = tour.price;
+            document.getElementById('edit-originalPrice').value = tour.originalPrice;
+            document.getElementById('edit-schedule').value = tour.schedule;
+            // Unir el array de actividades en un string separado por comas para el input
+            document.getElementById('edit-activities').value = Array.isArray(tour.activities) ? tour.activities.join(', ') : (tour.activities || '');
+            document.getElementById('edit-location_url').value = tour.location_url;
+            document.getElementById('edit-recommended').checked = tour.recommended;
+
+            editModal.classList.remove('hidden');
+        }
+
+        /** Cierra el modal de edición. */
+        function closeModal() {
+            editModal.classList.add('hidden');
+            editForm.reset(); 
+        }
+
+        // 5. LÓGICA DE AUTENTICACIÓN
+
+        /** Maneja el intento de login con el token. */
+        function handleLogin(event) {
+            event.preventDefault();
+            const token = document.getElementById('admin-token').value.trim();
+            
+            // Llama a la función que contiene el token
+            if (token === getAdminToken()) { 
+                isLoggedIn = true;
+                closeLoginModal();
+                updateLoginButton();
+                showNotification('Acceso de administrador concedido.', 'success');
+                // Al loguearse, forzamos la recarga de las tarjetas para mostrar el botón de edición
+                filterTours();
+                renderRecommendedTours();
+            } else {
+                loginErrorMessage.classList.remove('hidden');
+                document.getElementById('admin-token').value = ''; // Limpiar el campo
+                showNotification('Clave incorrecta. Acceso denegado.', 'error');
+            }
+        }
+
+
+        // 6. CONEXIÓN CON APPS SCRIPT (fetch)
+
+        /**
+         * Realiza una petición fetch con reintentos para manejar errores temporales.
+         */
+        async function fetchWithRetry(url, options = {}, retries = 3) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                         let errorText = await response.text();
+                         throw new Error(`HTTP Error ${response.status}: ${errorText}`);
+                    }
+                    return response;
+                } catch (error) {
+                    console.error(`Error de fetch (Intento ${i + 1}):`, error.message);
+                    if (i === retries - 1) throw error; 
+                    await new Promise(resolve => setTimeout(resolve, Math.pow(2, i) * 1000)); 
+                }
+            }
+        }
+        
+        /** Obtiene todas las excursiones de la Hoja de Cálculo. */
+        async function fetchTours() {
+            toggleLoading(true);
+            try {
+                const response = await fetchWithRetry(API_URL, { method: 'GET' });
+                const result = await response.json();
+                
+                if (result && result.data) {
+                    excursions = result.data; // Cachea TODOS los datos
+                    
+                    // Popula el desplegable del modal de edición ANTES de renderizar
+                    populateEditCategoryDropdown(excursions); 
+
+                    // Llama a las funciones de renderizado
+                    renderRecommendedTours(); 
+                    populateFilters(excursions); 
+                    filterTours(); 
+                } else {
+                    showNotification('Error: Respuesta inesperada del servidor.', 'error');
+                    renderTours([]);
+                    renderRecommendedTours(); 
+                }
+            } catch (error) {
+                console.error("Error al obtener las excursiones:", error);
+                showNotification('Error al cargar datos. Verifica la URL de la API y la publicación del script.', 'error');
+                renderTours([]);
+                renderRecommendedTours(); 
+            } finally {
+                toggleLoading(false);
+            }
+        }
+
+        /** Actualiza una excursión en la Hoja de Cálculo. */
+        async function updateTour(formData) {
+            // Se asume que solo se puede llamar si isLoggedIn es true
+            if (!isLoggedIn) {
+                 showNotification('Sesión expirada. Por favor, inicia sesión de nuevo.', 'error');
+                 return;
+            }
+            toggleLoading(true);
+            try {
+                const response = await fetchWithRetry(API_URL, {
+                    method: 'POST',
+                    body: formData 
+                });
+                
+                const result = await response.json(); 
+
+                closeModal();
+                showNotification(result.message || 'Excursión actualizada con éxito.', 'success');
+                // Recarga para obtener la última versión y re-aplicar filtros
+                await fetchTours(); 
+                
+            } catch (error) {
+                console.error("Error al actualizar la excursión:", error);
+                showNotification(`Error al guardar: ${error.message.substring(0, 100)}`, 'error');
+            } finally {
+                toggleLoading(false);
+            }
+        }
+        
+        // 7. EVENT LISTENERS
+        
+        // Manejar el envío del formulario de edición
+        editForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(editForm);
+            
+            // Agregar rowIndex al FormData
+            formData.append('rowIndex', document.getElementById('edit-rowIndex').value);
+            
+            // Manejar el checkbox 'recommended' 
+            if (!formData.has('recommended')) {
+                formData.append('recommended', 'false');
+            }
+            
+            updateTour(formData);
+        });
+        
+        // Manejar el envío del formulario de login
+        loginForm.addEventListener('submit', handleLogin);
+
+
+        // Cargar los datos al iniciar la página
+        document.addEventListener('DOMContentLoaded', fetchTours);
+
+    </script>
 </body>
 </html>

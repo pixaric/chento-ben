@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chento-Ben | Excursiones & Aventuras</title>
+    <!-- Tailwind CSS para la estructura y utilidad -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome y Fuentes -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Configuraciones de Tailwind */
+        @layer base {
+            :root {
+                --color-primary: #10b981; /* Emerald 500 */
+                --color-secondary: #3b82f6; /* Blue 500 */
+                --font-pacifico: 'Pacifico', cursive;
+                --font-poppins: 'Poppins', sans-serif;
+            }
+        }
+
+        /* Estilos Globales y Header */
+        body {
+            font-family: var(--font-poppins);
+            background-color: #f7f9fb;
+            padding-top: 6rem; /* Espacio para el header fijo */
+        }
+        header {
+            background-color: #1f2937; /* Gray 800 */
+            color: white;
+            padding: 1.5rem 1rem;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .brand-name {
+            font-family: var(--font-pacifico);
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 0.25rem;
+        }
+        header p {
+            font-size: 0.9rem;
+            color: #d1d5db;
+        }
+
+        /* Main Container */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid var(--color-primary);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        
+        /* Grids */
+        .excursions-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+
+        /* --- Filter Styling --- */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding: 1rem;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background-color: #e5e7eb;
+            color: #374151;
+            border: none;
+        }
+        .filter-btn:hover {
+            background-color: #d1d5db;
+        }
+        .filter-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
+        }
+
+        /* --- Card Styling (Aesthetics) --- */
+        .card {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
+        }
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--color-secondary);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 10;
+        }
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .card-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .card-content p {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .card-details {
+            margin-bottom: 15px;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 12px;
+        }
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 8px;
+        }
+        .detail-item i {
+            margin-right: 8px;
+            color: var(--color-primary);
+            margin-top: 3px;
+        }
+        .activities-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            display: inline;
+        }
+        .activities-list li {
+            background-color: #f0fdf4;
+            color: var(--color-primary);
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 2px 4px 2px 0;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        /* Price Styling */
+        .price-container {
+            display: flex;
+            align-items: center;
+            margin-top: auto;
+            margin-bottom: 15px;
+        }
+        .current-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-right: 10px;
+        }
+        .original-price {
+            font-size: 1rem;
+            color: #9ca3af;
+            text-decoration: line-through;
+            margin-right: 10px;
+        }
+        .discount-badge {
+            background-color: #facc15;
+            color: #1f2937;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            animation: pulse-discount 1.5s infinite;
+        }
+        @keyframes pulse-discount {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        /* WhatsApp FAB Button */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.6);
+            transition: transform 0.2s, background-color 0.2s;
+            z-index: 100;
+        }
+        .whatsapp-fab:hover {
+            background-color: #1ebe5a;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #374151; /* Gray 700 */
+            color: white;
+            text-align: center;
+            padding: 1.5rem 1rem;
+            margin-top: 40px;
+        }
+        .social-media a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        .social-media a:hover {
+            color: var(--color-primary);
+        }
+        .whatsapp-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background-color: #25d366; /* WhatsApp Green */
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.4);
+        }
+        .whatsapp-button:hover {
+            background-color: #1ebe5a;
+            transform: translateY(-1px);
+        }
+        .whatsapp-button i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+            color: white; 
+        }
+        .location-link {
+            display: flex;
+            align-items: center;
+            color: var(--color-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .location-link:hover {
+            color: #2563eb; /* Blue 600 */
+        }
+        .location-link i {
+            color: var(--color-secondary);
+        }
+
+        /* Estilo para el botón de edición */
+        .edit-button {
+            background-color: #3b82f6; /* Blue 500 */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            box-shadow: 0 4px 6px rgba(59, 130, 246, 0.4);
+            border: none;
+            flex-grow: 1; /* Permitir que ocupe espacio junto al botón de Reservar */
+        }
+        .edit-button:hover {
+            background-color: #2563eb; /* Blue 600 */
+            transform: translateY(-1px);
+        }
+        .edit-button i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+            color: white;
+        }
+        
+        /* Ajuste el botón WhatsApp para que comparta espacio con Editar */
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .card-actions .whatsapp-button {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="brand-name">Chento-Ben</h1>
+        <p>Vive la aventura, crea tu historia. ¡Contáctanos y empieza a explorar!</p>
+    </header>
+
+    <main>
+        <section id="recommended-section" class="mb-10">
+            <h2>⭐ Recomendados para ti</h2>
+            <div id="recommended-container" class="excursions-grid">
+                <!-- Las tarjetas recomendadas se insertarán aquí por JavaScript -->
+            </div>
+        </section>
+
+        <section id="excursions-section">
+             <div class="filter-container" id="filter-container">
+                <!-- Los botones de filtro se insertarán aquí por JavaScript -->
+            </div>
+            <h2>Nuestras Excursiones</h2>
+            <div id="excursions-container" class="excursions-grid">
+                <p class="col-span-full text-center text-gray-500 mt-8">Cargando excursiones...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal de Edición (Oculto por defecto) -->
+    <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-75 hidden items-center justify-center p-4 z-[101]">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-y-auto max-h-[90vh]">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-gray-800">Editar Excursión: <span id="modal-excursion-name"></span></h3>
+                <button id="close-modal-btn" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-2xl"></i>
+                </button>
+            </div>
+            
+            <form id="edit-form" class="p-6 space-y-4">
+                <!-- Hidden input for identifying the row to update -->
+                <input type="hidden" id="edit-rowIndex" name="rowIndex">
+
+                <!-- Name -->
+                <div>
+                    <label for="edit-name" class="block text-sm font-medium text-gray-700">Nombre</label>
+                    <input type="text" id="edit-name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label for="edit-description" class="block text-sm font-medium text-gray-700">Descripción</label>
+                    <textarea id="edit-description" name="description" rows="3" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border"></textarea>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Category -->
+                    <div>
+                        <label for="edit-category" class="block text-sm font-medium text-gray-700">Categoría</label>
+                        <input type="text" id="edit-category" name="category" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                    </div>
+                    <!-- Schedule -->
+                    <div>
+                        <label for="edit-schedule" class="block text-sm font-medium text-gray-700">Horario/Duración</label>
+                        <input type="text" id="edit-schedule" name="schedule" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <!-- Price -->
+                    <div>
+                        <label for="edit-price" class="block text-sm font-medium text-gray-700">Precio (€)</label>
+                        <input type="number" step="0.01" id="edit-price" name="price" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                    </div>
+                    <!-- Original Price -->
+                    <div>
+                        <label for="edit-originalPrice" class="block text-sm font-medium text-gray-700">Precio Original (€)</label>
+                        <input type="number" step="0.01" id="edit-originalPrice" name="originalPrice" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border">
+                    </div>
+                    <!-- Recommended -->
+                    <div class="flex items-end">
+                        <div class="flex items-center h-full">
+                            <input id="edit-recommended" name="recommended" type="checkbox" class="h-4 w-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
+                            <label for="edit-recommended" class="ml-2 text-sm font-medium text-gray-700">Recomendada</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Activities (Comma separated) -->
+                <div>
+                    <label for="edit-activities" class="block text-sm font-medium text-gray-700">Actividades (separadas por coma)</label>
+                    <input type="text" id="edit-activities" name="activities" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border" placeholder="Ej: Rafting, Senderismo, Kayak">
+                </div>
+                
+                <!-- Location URL -->
+                <div>
+                    <label for="edit-location_url" class="block text-sm font-medium text-gray-700">Enlace de Ubicación (Google Maps)</label>
+                    <input type="url" id="edit-location_url" name="location_url" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-emerald-500 focus:ring-emerald-500 p-2 border" placeholder="https://maps.app.goo.gl/...">
+                </div>
+
+                <!-- Status Message (Feedback) -->
+                <div id="edit-status" class="py-2 text-center font-medium rounded-md hidden"></div>
+
+                <button type="submit" id="submit-edit-btn" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-colors">
+                    <i class="fas fa-save mr-2"></i> Guardar Cambios
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        <div class="social-media">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p>&copy; 2024 Chento-Ben. Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://wa.me/5491112345678" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURACIÓN ---
+            const WHATSAPP_NUMBER = '5491112345678';
+            
+            // URL de la API de Google Sheets (Script de Apps Script)
+            // URL proporcionada por el usuario en el código anterior
+            const API_URL = 'https://script.google.com/macros/s/AKfycbxuJslrOHgBE0ra15vkFEafrswfL2qwfZrsMmqaSKpT4QHdigrBv0HM1FIchwyKZtLi/exec';
+
+
+            // --- ELEMENTOS DEL DOM ---
+            const excursionsContainer = document.getElementById('excursions-container');
+            const recommendedContainer = document.getElementById('recommended-container');
+            const filterContainer = document.getElementById('filter-container');
+            
+            // Elementos del Modal de Edición
+            const editModal = document.getElementById('edit-modal');
+            const closeBtn = document.getElementById('close-modal-btn');
+            const editForm = document.getElementById('edit-form');
+            const editStatus = document.getElementById('edit-status');
+            const modalExcursionName = document.getElementById('modal-excursion-name');
+
+
+            let excursions = [];
+
+            // Utilidad para esperar (necesario para el backoff)
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            // Función para mostrar errores de forma visible
+            const displayError = (message) => {
+                if (excursionsContainer) {
+                    excursionsContainer.innerHTML = `<p class="col-span-full text-center text-red-600 font-semibold p-4 bg-red-50 rounded-lg">
+                        <i class="fas fa-exclamation-triangle mr-2"></i> ${message}
+                    </p>`;
+                }
+            };
+            
+            // Función para cerrar el modal
+            const closeModal = () => {
+                editModal.classList.add('hidden');
+                editModal.classList.remove('flex');
+                editStatus.classList.add('hidden'); // Ocultar mensaje de estado al cerrar
+            };
+
+            // Event listener para cerrar el modal
+            closeBtn.addEventListener('click', closeModal);
+            editModal.addEventListener('click', (e) => {
+                if (e.target === editModal) {
+                    closeModal();
+                }
+            });
+
+            // --- FETCH CON REINTENTO (para manejar el 'Failed to fetch') ---
+            const fetchWithRetry = async (url, options = {}, retries = 3) => {
+                for (let i = 0; i < retries; i++) {
+                    try {
+                        const response = await fetch(url, options);
+                        if (!response.ok) {
+                            // Si es un error HTTP, detenemos el reintento
+                            let errorDetail = `Error HTTP ${response.status}.`;
+                            const text = await response.text();
+                            errorDetail += ` Respuesta: ${text.substring(0, 100)}`;
+                            throw new Error(errorDetail);
+                        }
+                        return response;
+                    } catch (error) {
+                        // Solo reintentar si es un error de red (como 'Failed to fetch')
+                        if (i < retries - 1 && (error.message.includes('Failed to fetch') || error.message.includes('NetworkError'))) {
+                            const delay = Math.pow(2, i) * 1000; // 1s, 2s, 4s delay
+                            await sleep(delay);
+                        } else {
+                            // Lanzar el error final
+                            throw error;
+                        }
+                    }
+                }
+            };
+
+            // --- CARGAR EXCURSIONES DESDE GOOGLE SHEETS API ---
+            const loadExcursions = async () => {
+                 // Mostrar estado de carga
+                 excursionsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 mt-8"><i class="fas fa-spinner fa-spin mr-2"></i> Cargando excursiones...</p>';
+                 recommendedContainer.innerHTML = '';
+                 filterContainer.innerHTML = '';
+
+                 try {
+                    const response = await fetchWithRetry(API_URL);
+                    const data = await response.json();
+
+                    // ¡IMPORTANTE! El doGet devuelve { data: [...] }, así que lo esperamos.
+                    if (!data.data || !Array.isArray(data.data)) {
+                        throw new Error("La API no devolvió una lista válida de excursiones o falta el campo 'data'.");
+                    }
+                    
+                    console.log("Datos de excursiones cargados correctamente.");
+
+                    excursions = data.data.map(item => ({ 
+                        ...item,
+                        // Conversión de tipos de datos y asegurando valores por defecto
+                        price: parseFloat(item.price) || 0, 
+                        originalPrice: parseFloat(item.originalPrice) || null,
+                        recommended: item.recommended === true || String(item.recommended).toLowerCase() === "true", 
+                        activities: Array.isArray(item.activities)
+                            ? item.activities
+                            : typeof item.activities === "string"
+                                // Manejar el caso de celdas vacías que devuelven strings vacíos
+                                ? item.activities.split(',').map(a => a.trim()).filter(a => a.length > 0) 
+                                : [],
+                        // Asignar un valor por defecto si no existe o es nulo
+                        schedule: item.schedule || 'Consultar Horario',
+                        location_url: item.location_url || '#'
+                    }));
+                    
+                    renderCards();
+                    setupFilters();
+                    setupEditListeners();
+
+                 } catch(error) {
+                    console.error("Error al cargar excursiones:", error);
+                    let userMessage = `No se pudieron cargar las excursiones. Causa: ${error.message}.`;
+                    
+                    if (error.message.includes('Failed to fetch')) {
+                         userMessage = `ERROR DE CONEXIÓN. Revise si el Apps Script está publicado con acceso a "Cualquier persona" (anónimo) y si la URL es correcta. Causa: ${error.message}`;
+                    } else if (error.message.includes('Error HTTP')) {
+                        userMessage = `Error al obtener datos: ${error.message}. Esto puede indicar un error en la ejecución del Script o una URL inválida.`;
+                    }
+                    
+                    displayError(userMessage);
+                 }
+            };
+            
+            // --- INICIALIZACIÓN ---
+            loadExcursions();
+
+
+            // --- CREAR TARJETA ---
+            const createCard = (excursion) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.category = excursion.category;
+                // Guardar el rowIndex en el dataset de la tarjeta para la edición
+                card.dataset.rowIndex = excursion.rowIndex;
+
+                const message = `Hola! Quiero reservar la excursión "${excursion.name}". ¿Podrían darme más información?`;
+                const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+                let priceHTML = '';
+                if (excursion.originalPrice && excursion.originalPrice > excursion.price) {
+                    const discount = Math.round(((excursion.originalPrice - excursion.price) / excursion.originalPrice) * 100);
+                    priceHTML = `
+                        <div class="price-container">
+                            <span class="current-price">€${excursion.price.toFixed(2)}</span>
+                            <span class="original-price">€${excursion.originalPrice.toFixed(2)}</span>
+                            <span class="discount-badge">${discount}% OFF</span>
+                        </div>
+                    `;
+                } else {
+                    priceHTML = `
+                        <div class="price-container">
+                            <span class="current-price">€${excursion.price.toFixed(2)}</span>
+                        </div>
+                    `;
+                }
+
+                const locationLinkHtml = excursion.location_url && excursion.location_url !== '#' ? `
+                    <div class="detail-item">
+                        <a href="${excursion.location_url}" target="_blank" class="location-link">
+                            <i class="fas fa-route"></i> Cómo llegar
+                        </a>
+                    </div>
+                ` : '';
+                
+                // Usar una imagen de placeholder si no hay URL válida
+                const imageUrl = excursion.image && excursion.image.startsWith('http') 
+                                ? excursion.image 
+                                : 'https://placehold.co/600x400/10b981/ffffff?text=Imagen+No+Disponible';
+
+                card.innerHTML = `
+                    ${excursion.recommended ? '<div class="card-badge">Recomendado</div>' : ''}
+                    <img src="${imageUrl}" alt="${excursion.name}" class="card-img" onerror="this.onerror=null;this.src='https://placehold.co/600x400/10b981/ffffff?text=Error+Carga+Imagen';"> 
+                    <div class="card-content">
+                        <h3>${excursion.name}</h3>
+                        <p>${excursion.description}</p>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${excursion.schedule || 'Consultar Horario'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-tasks"></i>
+                                <ul class="activities-list">
+                                    ${excursion.activities.length > 0 ? excursion.activities.map(activity => `<li>${activity}</li>`).join('') : '<li>No hay actividades</li>'}
+                                </ul>
+                            </div>
+                            ${locationLinkHtml}
+                        </div>
+                        ${priceHTML}
+                        <div class="card-actions">
+                            <button data-row-index="${excursion.rowIndex}" class="edit-button">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                            <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="whatsapp-button">
+                                <i class="fab fa-whatsapp"></i> Reservar
+                            </a>
+                        </div>
+                    </div>
+                `;
+                return card;
+            };
+
+            // --- RENDERIZAR TARJETAS ---
+            const renderCards = () => {
+                excursionsContainer.innerHTML = '';
+                recommendedContainer.innerHTML = '';
+                
+                if (excursions.length === 0) {
+                     excursionsContainer.innerHTML = '<p class="col-span-full text-center text-gray-500 mt-8">No hay excursiones disponibles para mostrar.</p>';
+                     return;
+                }
+
+                excursions.forEach(excursion => {
+                    const card = createCard(excursion);
+                    excursionsContainer.appendChild(card);
+
+                    if (excursion.recommended) {
+                        const recommendedCard = createCard(excursion);
+                        recommendedContainer.appendChild(recommendedCard);
+                    }
+                });
+
+                // Animación de scroll
+                const allCards = document.querySelectorAll('.card');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                allCards.forEach(card => observer.observe(card));
+            };
+            
+            // --- LÓGICA DE EDICIÓN ---
+            
+            // 1. Abrir Modal y precargar datos
+            const openEditModal = (excursion) => {
+                modalExcursionName.textContent = excursion.name;
+                
+                // Rellenar formulario
+                document.getElementById('edit-rowIndex').value = excursion.rowIndex;
+                document.getElementById('edit-name').value = excursion.name;
+                document.getElementById('edit-description').value = excursion.description;
+                document.getElementById('edit-category').value = excursion.category;
+                // Usar toFixed(2) para asegurar el formato de moneda en el campo de entrada
+                document.getElementById('edit-price').value = excursion.price.toFixed(2); 
+                document.getElementById('edit-originalPrice').value = excursion.originalPrice ? excursion.originalPrice.toFixed(2) : '';
+                document.getElementById('edit-recommended').checked = excursion.recommended;
+                document.getElementById('edit-schedule').value = excursion.schedule;
+                document.getElementById('edit-activities').value = excursion.activities.join(', ');
+                document.getElementById('edit-location_url').value = excursion.location_url !== '#' ? excursion.location_url : '';
+
+                editModal.classList.remove('hidden');
+                editModal.classList.add('flex');
+            };
+
+            // 2. Manejar la sumisión del formulario
+            editForm.addEventListener('submit', handleEditSubmission);
+
+            async function handleEditSubmission(e) {
+                e.preventDefault();
+                
+                const submitBtn = document.getElementById('submit-edit-btn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Guardando...';
+                
+                editStatus.classList.add('hidden');
+
+                // Recolectar datos del formulario
+                const formData = new FormData(editForm);
+                const payload = new URLSearchParams(formData);
+
+                // Aseguramos que 'recommended' se envíe como 'true' o 'false'
+                if (!document.getElementById('edit-recommended').checked) {
+                    payload.set('recommended', 'false');
+                } else {
+                    payload.set('recommended', 'true');
+                }
+                
+                // Apps Script espera que los datos se envíen como x-www-form-urlencoded (e.parameter)
+                try {
+                    const response = await fetchWithRetry(API_URL, {
+                        method: 'POST',
+                        // El cuerpo debe ser URLSearchParams
+                        body: payload 
+                    });
+
+                    const resultText = await response.text();
+                    
+                    editStatus.textContent = '¡Éxito! Excursión actualizada. Recargando datos...';
+                    editStatus.className = 'py-2 text-center font-medium rounded-md bg-green-100 text-green-700';
+                    editStatus.classList.remove('hidden');
+
+                    // 3. Recargar datos después de la actualización exitosa
+                    setTimeout(async () => {
+                         closeModal();
+                         await loadExcursions(); // Recargar todos los datos para reflejar el cambio
+                    }, 1500);
+
+                } catch (error) {
+                    console.error("Error al actualizar la excursión:", error);
+                    editStatus.textContent = `Error al guardar: ${error.message.substring(0, 100)}...`;
+                    editStatus.className = 'py-2 text-center font-medium rounded-md bg-red-100 text-red-700';
+                    editStatus.classList.remove('hidden');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Guardar Cambios';
+                }
+            }
+
+            // 4. Configurar listeners de edición en los botones
+            const setupEditListeners = () => {
+                const editButtons = document.querySelectorAll('.edit-button');
+                editButtons.forEach(button => {
+                    // Remover listener previo para evitar duplicados al recargar las tarjetas
+                    button.removeEventListener('click', handleEditClick); 
+                    button.addEventListener('click', handleEditClick);
+                });
+            };
+            
+            function handleEditClick(e) {
+                 const rowIndex = e.currentTarget.dataset.rowIndex;
+                 // Buscar la excursión por su rowIndex (que está guardado como string en el dataset)
+                 const excursionToEdit = excursions.find(ex => String(ex.rowIndex) === rowIndex); 
+
+                 if (excursionToEdit) {
+                     openEditModal(excursionToEdit);
+                 } else {
+                     console.error("No se encontró la excursión con rowIndex:", rowIndex);
+                 }
+            }
+
+
+            // --- FILTROS POR CATEGORÍA ---
+            const setupFilters = () => {
+                if (!filterContainer) return;
+
+                // Solo obtener categorías de excursiones que tienen un valor
+                const categories = ['Todos', ...new Set(excursions.map(ex => ex.category).filter(c => c && c.length > 0))];
+                
+                filterContainer.innerHTML = categories.map(category =>
+                    `<button class="filter-btn ${category === 'Todos' ? 'active' : ''}" data-filter="${category}">${category}</button>`
+                ).join('');
+
+                filterContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('filter-btn')) {
+                        const filter = e.target.dataset.filter;
+
+                        filterContainer.querySelector('.filter-btn.active')?.classList.remove('active');
+                        e.target.classList.add('active');
+
+                        const cards = excursionsContainer.querySelectorAll('.card');
+                        cards.forEach(card => {
+                            // Usamos flex en lugar de block para mantener el estilo de la tarjeta
+                            card.style.display = (filter === 'Todos' || card.dataset.category === filter) ? 'flex' : 'none';
+                        });
+                    }
+                });
+            };
+        });
+    </script>
+</body>
+</html>
