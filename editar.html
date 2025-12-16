@@ -44,7 +44,7 @@
             text-align: center;
         }
 
-        /* Contenedor Principal */
+        /* Contenedor Principal y Puerta de Acceso */
         .container {
             width: 100%;
             max-width: 900px;
@@ -53,6 +53,11 @@
             border-radius: var(--border-radius);
             box-shadow: var(--shadow);
             margin-bottom: 30px;
+        }
+        
+        /* Estilo específico para el input de token */
+        #security-token {
+            width: 100%;
         }
 
         /* Selector de Excursiones */
@@ -93,6 +98,7 @@
 
         input[type="text"],
         input[type="number"],
+        input[type="password"], /* Estilo para el campo de contraseña */
         textarea,
         select {
             padding: 10px 12px;
@@ -119,7 +125,8 @@
         }
 
         /* Botón de Guardar */
-        #edit-form button[type="submit"] {
+        #edit-form button[type="submit"],
+        #login-form button[type="submit"] {
             grid-column: 1 / -1; /* Ocupar todo el ancho */
             padding: 15px 20px;
             background-color: var(--success-color);
@@ -134,10 +141,21 @@
             margin-top: 10px;
         }
 
-        #edit-form button[type="submit"]:hover {
+        #edit-form button[type="submit"]:hover,
+        #login-form button[type="submit"]:hover {
             background-color: #27ae60;
             transform: translateY(-2px);
             box-shadow: 0 6px 10px rgba(46, 204, 113, 0.4);
+        }
+        
+        /* Botón de login con color primario */
+        #login-form button[type="submit"] {
+            background-color: var(--primary-color);
+            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
+        }
+        #login-form button[type="submit"]:hover {
+            background-color: var(--primary-dark);
+            box-shadow: 0 6px 10px rgba(52, 152, 219, 0.4);
         }
 
         /* Mensajes de Confirmación/Error */
@@ -230,97 +248,134 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>✏️ Editar Excursión Existente</h2>
-        
-        <select id="excursion-selector" aria-label="Selecciona una excursión">
-            <option disabled selected>Selecciona una excursión</option>
-        </select>
-
-        <form id="edit-form">
-            <input type="hidden" name="rowIndex" id="rowIndex">
-            
-            <label>Nombre:
-                <input type="text" name="name" id="name" required placeholder="Nombre de la excursión">
+    
+    <!-- Access Gate Container (Visible inicialmente) -->
+    <div id="access-gate" class="container" style="max-width: 500px; margin-top: 100px;">
+        <h2>🔐 Acceso Restringido</h2>
+        <p style="text-align: center; margin-bottom: 20px;">Introduce el token de seguridad para acceder al gestor de excursiones.</p>
+        <form id="login-form">
+            <label>Token de Acceso:
+                <input type="password" id="security-token" placeholder="Introduce tu clave secreta" required>
             </label>
-            
-            <label>Descripción:
-                <textarea name="description" id="description" required placeholder="Descripción detallada de la actividad"></textarea>
-            </label>
-            
-            <label>Categoría:
-                <select name="category" id="category" required>
-                    <option value="">-- Selecciona Categoría --</option>
-                    <option value="barco">⛵ Barco</option>
-                    <option value="buggy">🚜 Buggy</option>
-                    <option value="excursiones">🚶 Excursiones</option>
-                    <option value="jetcor">🛥️ Jetcor</option>
-                    <option value="jetsky">🚤 Jetsky</option>
-                    <option value="movilite">🛴 Movilite</option>
-                    <option value="quad">🏍️ Quad</option>
-                    <option value="velero">⚓ Velero</option>
-                </select>
-            </label>
-            
-            <label>Precio (€):
-                <input type="number" name="price" id="price" required placeholder="Ej: 50.00">
-            </label>
-            
-            <label>Precio original (€) (Opcional):
-                <input type="number" name="originalPrice" id="originalPrice" placeholder="Ej: 75.00">
-            </label>
-            
-            <label>¿Recomendado?:
-                <select name="recommended" id="recommended">
-                    <option value="false">No ❌</option>
-                    <option value="true">Sí ✅</option>
-                </select>
-            </label>
-            
-            <label>Horario:
-                <input type="text" name="schedule" id="schedule" placeholder="Ej: Mañanas (10:00h) y Tardes (16:00h)">
-            </label>
-            
-            <label>Actividades:
-                <input type="text" name="activities" id="activities" placeholder="Lista de actividades separadas por coma">
-            </label>
-
-            <label>Ubicación (URL de Google Maps):
-                <input type="text" name="location_url" id="location_url" placeholder="URL completa de Google Maps">
-            </label>
-
-            <button type="submit">💾 Guardar Cambios</button>
+            <button type="submit" style="grid-column: 1 / -1;">Acceder</button>
+            <div id="login-message" class="error-msg" style="display: none; grid-column: 1 / -1;"></div>
         </form>
     </div>
 
-    <!-- Sección de Previsualización (Añadida para renderizar las "cards" que JS intenta llenar) -->
-    <div class="cards-section">
-        <h2>Vista Rápida de Excursiones</h2>
-        <div id="excursion-cards">
-            <!-- Las tarjetas se cargarán aquí -->
+    <!-- Main Content (Oculto inicialmente) -->
+    <div id="main-content" style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div class="container">
+            <h2>✏️ Editar Excursión Existente</h2>
+            
+            <select id="excursion-selector" aria-label="Selecciona una excursión">
+                <option disabled selected>Selecciona una excursión</option>
+            </select>
+
+            <form id="edit-form">
+                <input type="hidden" name="rowIndex" id="rowIndex">
+                <input type="hidden" name="securityToken" id="securityTokenField">
+                
+                <label>Nombre:
+                    <input type="text" name="name" id="name" required placeholder="Nombre de la excursión">
+                </label>
+                
+                <label>Descripción:
+                    <textarea name="description" id="description" required placeholder="Descripción detallada de la actividad"></textarea>
+                </label>
+                
+                <label>Categoría:
+                    <select name="category" id="category" required>
+                        <option value="">-- Selecciona Categoría --</option>
+                        <option value="barco">⛵ Barco</option>
+                        <option value="buggy">🚜 Buggy</option>
+                        <option value="excursiones">🚶 Excursiones</option>
+                        <option value="jetcor">🛥️ Jetcor</option>
+                        <option value="jetsky">🚤 Jetsky</option>
+                        <option value="movilite">🛴 Movilite</option>
+                        <option value="quad">🏍️ Quad</option>
+                        <option value="velero">⚓ Velero</option>
+                    </select>
+                </label>
+                
+                <label>Precio (€):
+                    <input type="number" name="price" id="price" required placeholder="Ej: 50.00">
+                </label>
+                
+                <label>Precio original (€) (Opcional):
+                    <input type="number" name="originalPrice" id="originalPrice" placeholder="Ej: 75.00">
+                </label>
+                
+                <label>¿Recomendado?:
+                    <select name="recommended" id="recommended">
+                        <option value="false">No ❌</option>
+                        <option value="true">Sí ✅</option>
+                    </select>
+                </label>
+                
+                <label>Horario:
+                    <input type="text" name="schedule" id="schedule" placeholder="Ej: Mañanas (10:00h) y Tardes (16:00h)">
+                </label>
+                
+                <label>Actividades:
+                    <input type="text" name="activities" id="activities" placeholder="Lista de actividades separadas por coma">
+                </label>
+
+                <label>Ubicación (URL de Google Maps):
+                    <input type="text" name="location_url" id="location_url" placeholder="URL completa de Google Maps">
+                </label>
+
+                <button type="submit">💾 Guardar Cambios</button>
+            </form>
+        </div>
+
+        <!-- Sección de Previsualización -->
+        <div class="cards-section">
+            <h2>Vista Rápida de Excursiones</h2>
+            <div id="excursion-cards">
+                <!-- Las tarjetas se cargarán aquí -->
+            </div>
         </div>
     </div>
   
-
   <script>
     (function() {
         'use strict';
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwdU3utUB2HKX9M2eKEsIvAiOG0JgDIGzx7m7Smry5WpfxSaFjBKeNJj7BORHk5Lreh/exec';
+        // ATENCIÓN DE SEGURIDAD: La clave real debe validarse en Google Apps Script. 
+        // Esta es solo una barrera de acceso inicial en el cliente.
+        const VALID_CLIENT_TOKEN = 'ADMIN_TOKEN_123'; // ¡CAMBIA ESTO!
+        
+        const BASE_API_URL = 'https://script.google.com/macros/s/AKfycbwI31lU3a-Qz0TrHDfpCCJy_wvEE3FM1OqOu-hzlvGVep3KLTcE6eCQRh8YbaeJgGA-/execc';
         let excursions = [];
+        let authenticatedToken = ''; // Token que se enviará con todas las peticiones
 
-        // Función para manejar las solicitudes de fetch con reintentos
+        const accessGate = document.getElementById('access-gate');
+        const mainContent = document.getElementById('main-content');
+        const loginForm = document.getElementById('login-form');
+        const loginMessage = document.getElementById('login-message');
+
+        /**
+         * Función para manejar las solicitudes de fetch con reintentos.
+         * Inyecta el token de seguridad en la URL para peticiones GET.
+         * @param {string} url - URL base.
+         * @param {Object} options - Opciones de Fetch.
+         * @returns {Promise<Response>}
+         */
         async function safeFetch(url, options = {}) {
+            // Construir la URL final con el token
+            const finalUrl = new URL(url);
+            finalUrl.searchParams.set('token', authenticatedToken);
+
             let lastError = null;
             for (let i = 0; i < 3; i++) { // Intentar hasta 3 veces
                 try {
-                    const response = await fetch(url, options);
+                    const response = await fetch(finalUrl.toString(), options);
                     if (!response.ok) {
+                        // Si el script de Apps responde con error 400/500, lanzar un error.
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
                     return response;
                 } catch (error) {
                     lastError = error;
-                    // Espera exponencial: 1s, 2s, 4s (incluyendo el caso donde i=0 -> 1s)
                     const delay = Math.pow(2, i) * 1000;
                     await new Promise(resolve => setTimeout(resolve, delay));
                 }
@@ -328,32 +383,59 @@
             throw new Error(`Falló la solicitud después de múltiples reintentos: ${lastError.message}`);
         }
 
+        // --- Lógica de Acceso ---
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tokenInput = document.getElementById('security-token');
+            const token = tokenInput.value.trim();
 
-        safeFetch(API_URL)
-            .then(res => res.json())
-            .then(data => {
-                excursions = data;
-                const selector = document.getElementById('excursion-selector');
-                const cards = document.getElementById('excursion-cards');
+            loginMessage.style.display = 'none';
+
+            if (token === VALID_CLIENT_TOKEN) {
+                authenticatedToken = token;
+                document.getElementById('securityTokenField').value = token;
                 
-                // Generar opciones del selector
-                selector.innerHTML = `
-    <option disabled selected>Selecciona una excursión</option>
-    ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
-`;
-                // Generar tarjetas de vista rápida
-                cards.innerHTML = data.map(ex => `
-              <div class="card" id="excursion-${ex.rowIndex}">
-                <h3>${ex.name}</h3>
-                <p>${ex.description}</p>
-                <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
-              </div>
-            `).join('');
-            })
-            .catch(err => {
-                console.error("Error al cargar datos iniciales:", err);
-                document.getElementById('excursion-cards').innerHTML = '<p class="error-msg" style="grid-column: 1 / -1; margin: 0; display: block;">❌ No se pudieron cargar las excursiones desde la API.</p>';
-            });
+                accessGate.style.display = 'none';
+                mainContent.style.display = 'flex'; // Mostrar contenido principal
+                
+                // Iniciar la carga de datos después del acceso
+                loadExcursionData();
+            } else {
+                loginMessage.textContent = '❌ Token incorrecto. Acceso denegado.';
+                loginMessage.style.display = 'block';
+                tokenInput.value = ''; // Limpiar campo
+            }
+        });
+
+        // --- Lógica de Carga y Edición de Excursiones ---
+        function loadExcursionData() {
+            safeFetch(BASE_API_URL)
+                .then(res => res.json())
+                .then(data => {
+                    excursions = data;
+                    const selector = document.getElementById('excursion-selector');
+                    const cards = document.getElementById('excursion-cards');
+                    
+                    // Generar opciones del selector
+                    selector.innerHTML = `
+        <option disabled selected>Selecciona una excursión</option>
+        ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
+    `;
+                    // Generar tarjetas de vista rápida
+                    cards.innerHTML = data.map(ex => `
+                      <div class="card" id="excursion-${ex.rowIndex}">
+                        <h3>${ex.name}</h3>
+                        <p>${ex.description}</p>
+                        <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
+                      </div>
+                    `).join('');
+                })
+                .catch(err => {
+                    console.error("Error al cargar datos iniciales:", err);
+                    document.getElementById('excursion-cards').innerHTML = '<p class="error-msg" style="grid-column: 1 / -1; margin: 0; display: block;">❌ No se pudieron cargar las excursiones desde la API. Verifique el token y el script de Apps.</p>';
+                });
+        }
+
 
         document.getElementById('excursion-selector').addEventListener('change', (e) => {
             const index = e.target.value;
@@ -387,15 +469,19 @@
             const formData = new FormData(form);
             const data = {};
             formData.forEach((value, key) => data[key] = value);
+            
+            // ATENCIÓN: El token ya está en 'data' gracias al campo hidden #securityTokenField
 
             // Usar safeFetch para el envío de datos
-            safeFetch(API_URL, {
+            safeFetch(BASE_API_URL, {
                 method: 'POST',
                 body: new URLSearchParams(data)
             })
             .then(res => res.text())
             .then(msg => {
-                
+                // Si el Apps Script valida el token, la actualización procede.
+                // Si el Apps Script rechaza el token, debería devolver un error HTTP (capturado en catch).
+
                 // Actualizar la tarjeta de vista previa
                 const card = document.getElementById(`excursion-${data.rowIndex}`);
                 if (card) {
@@ -413,10 +499,10 @@
             })
             .catch(err => {
                 console.error("Error al actualizar:", err);
-                // Reemplazo de alert() con un mensaje en el DOM
                 const errorMsg = document.createElement('div');
                 errorMsg.className = 'error-msg';
-                errorMsg.textContent = "❌ Error al guardar los cambios. Verifique la consola.";
+                // Mostrar un mensaje genérico de error que podría indicar un problema de token
+                errorMsg.textContent = "❌ Error al guardar los cambios. El Token podría ser inválido o el Apps Script falló.";
                 form.appendChild(errorMsg);
                 setTimeout(() => errorMsg.remove(), 5000);
             })
