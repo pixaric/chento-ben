@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Editar Excursión</title>
-  <link rel="stylesheet" href="assets/styles/editar.css">
-</head>
-<body>
-  <h2>Editar excursión existente</h2>
-<select id="excursion-selector" aria-label="Selecciona una excursión">
-
-<!DOCTYPE html>
-<html lang="es">
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Excursiones (Edición API Script)</title>
@@ -315,237 +303,129 @@
   
 
   <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwdU3utUB2HKX9M2eKEsIvAiOG0JgDIGzx7m7Smry5WpfxSaFjBKeNJj7BORHk5Lreh/exec';
-    let excursions = [];
+    (function() {
+        'use strict';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwdU3utUB2HKX9M2eKEsIvAiOG0JgDIGzx7m7Smry5WpfxSaFjBKeNJj7BORHk5Lreh/exec';
+        let excursions = [];
 
-    // Función para manejar las solicitudes de fetch con reintentos
-    async function safeFetch(url, options = {}) {
-        let lastError = null;
-        for (let i = 0; i < 3; i++) { // Intentar hasta 3 veces
-            try {
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+        // Función para manejar las solicitudes de fetch con reintentos
+        async function safeFetch(url, options = {}) {
+            let lastError = null;
+            for (let i = 0; i < 3; i++) { // Intentar hasta 3 veces
+                try {
+                    const response = await fetch(url, options);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                } catch (error) {
+                    lastError = error;
+                    // Espera exponencial: 1s, 2s, 4s (incluyendo el caso donde i=0 -> 1s)
+                    const delay = Math.pow(2, i) * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
                 }
-                return response;
-            } catch (error) {
-                lastError = error;
-                // Espera exponencial: 1s, 2s, 4s (incluyendo el caso donde i=0 -> 1s)
-                const delay = Math.pow(2, i) * 1000;
-                await new Promise(resolve => setTimeout(resolve, delay));
             }
+            throw new Error(`Falló la solicitud después de múltiples reintentos: ${lastError.message}`);
         }
-        throw new Error(`Falló la solicitud después de múltiples reintentos: ${lastError.message}`);
-    }
 
 
-    safeFetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        excursions = data;
-        const selector = document.getElementById('excursion-selector');
-        const cards = document.getElementById('excursion-cards');
-        
-        // Generar opciones del selector
-        selector.innerHTML = `
-  <option disabled selected>Selecciona una excursión</option>
-  ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
+        safeFetch(API_URL)
+            .then(res => res.json())
+            .then(data => {
+                excursions = data;
+                const selector = document.getElementById('excursion-selector');
+                const cards = document.getElementById('excursion-cards');
+                
+                // Generar opciones del selector
+                selector.innerHTML = `
+    <option disabled selected>Selecciona una excursión</option>
+    ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
 `;
-        // Generar tarjetas de vista rápida
-        cards.innerHTML = data.map(ex => `
-          <div class="card" id="excursion-${ex.rowIndex}">
-            <h3>${ex.name}</h3>
-            <p>${ex.description}</p>
-            <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
-          </div>
-        `).join('');
-      })
-      .catch(err => {
-          console.error("Error al cargar datos iniciales:", err);
-          document.getElementById('excursion-cards').innerHTML = '<p class="error-msg" style="grid-column: 1 / -1; margin: 0; display: block;">❌ No se pudieron cargar las excursiones desde la API.</p>';
-      });
+                // Generar tarjetas de vista rápida
+                cards.innerHTML = data.map(ex => `
+              <div class="card" id="excursion-${ex.rowIndex}">
+                <h3>${ex.name}</h3>
+                <p>${ex.description}</p>
+                <p>Precio: €${parseFloat(ex.price || 0).toFixed(2)}</p>
+              </div>
+            `).join('');
+            })
+            .catch(err => {
+                console.error("Error al cargar datos iniciales:", err);
+                document.getElementById('excursion-cards').innerHTML = '<p class="error-msg" style="grid-column: 1 / -1; margin: 0; display: block;">❌ No se pudieron cargar las excursiones desde la API.</p>';
+            });
 
-    document.getElementById('excursion-selector').addEventListener('change', (e) => {
-      const index = e.target.value;
-      const excursion = excursions[index];
-      
-      // Verificar si hay una excursión seleccionada
-      if (excursion) {
-          document.getElementById('rowIndex').value = excursion.rowIndex;
-          document.getElementById('name').value = excursion.name;
-          document.getElementById('description').value = excursion.description;
-          document.getElementById('category').value = excursion.category || "";
-          document.getElementById('price').value = excursion.price;
-          document.getElementById('originalPrice').value = excursion.originalPrice;
-          document.getElementById('recommended').value = String(excursion.recommended).toLowerCase() === 'true' ? 'true' : 'false';
-          document.getElementById('schedule').value = excursion.schedule;
-          document.getElementById('activities').value = excursion.activities;
-          document.getElementById('location_url').value = excursion.location_url || "";
-      }
-    });
+        document.getElementById('excursion-selector').addEventListener('change', (e) => {
+            const index = e.target.value;
+            const excursion = excursions[index];
+            
+            // Verificar si hay una excursión seleccionada
+            if (excursion) {
+                document.getElementById('rowIndex').value = excursion.rowIndex;
+                document.getElementById('name').value = excursion.name;
+                document.getElementById('description').value = excursion.description;
+                document.getElementById('category').value = excursion.category || "";
+                document.getElementById('price').value = excursion.price;
+                document.getElementById('originalPrice').value = excursion.originalPrice;
+                document.getElementById('recommended').value = String(excursion.recommended).toLowerCase() === 'true' ? 'true' : 'false';
+                document.getElementById('schedule').value = excursion.schedule;
+                document.getElementById('activities').value = excursion.activities;
+                document.getElementById('location_url').value = excursion.location_url || "";
+            }
+        });
 
-    document.getElementById('edit-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const form = e.target;
-      const submitButton = form.querySelector('button[type="submit"]');
+        document.getElementById('edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitButton = form.querySelector('button[type="submit"]');
 
-      // Limpiar mensajes anteriores
-      form.querySelectorAll('.confirm, .error-msg').forEach(el => el.remove());
-      submitButton.disabled = true;
-      submitButton.textContent = 'Guardando...';
+            // Limpiar mensajes anteriores
+            form.querySelectorAll('.confirm, .error-msg').forEach(el => el.remove());
+            submitButton.disabled = true;
+            submitButton.textContent = 'Guardando...';
 
-      const formData = new FormData(form);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
+            const formData = new FormData(form);
+            const data = {};
+            formData.forEach((value, key) => data[key] = value);
 
-      // Usar safeFetch para el envío de datos
-      safeFetch(API_URL, {
-        method: 'POST',
-        body: new URLSearchParams(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        
-          // Actualizar la tarjeta de vista previa
-          const card = document.getElementById(`excursion-${data.rowIndex}`);
-          if (card) {
-            card.querySelector('h3').textContent = data.name;
-            card.querySelector('p:nth-of-type(1)').textContent = data.description;
-            card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${parseFloat(data.price || 0).toFixed(2)}`;
-          }
+            // Usar safeFetch para el envío de datos
+            safeFetch(API_URL, {
+                method: 'POST',
+                body: new URLSearchParams(data)
+            })
+            .then(res => res.text())
+            .then(msg => {
+                
+                // Actualizar la tarjeta de vista previa
+                const card = document.getElementById(`excursion-${data.rowIndex}`);
+                if (card) {
+                    card.querySelector('h3').textContent = data.name;
+                    card.querySelector('p:nth-of-type(1)').textContent = data.description;
+                    card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${parseFloat(data.price || 0).toFixed(2)}`;
+                }
 
-          // Mostrar mensaje de éxito
-          const confirm = document.createElement('div');
-          confirm.className = 'confirm';
-          confirm.textContent = "✅ Excursión actualizada correctamente";
-          form.appendChild(confirm);
-          setTimeout(() => confirm.remove(), 3000);
-      })
-      .catch(err => {
-        console.error("Error al actualizar:", err);
-        // Reemplazo de alert() con un mensaje en el DOM
-        const errorMsg = document.createElement('div');
-        errorMsg.className = 'error-msg';
-        errorMsg.textContent = "❌ Error al guardar los cambios. Verifique la consola.";
-        form.appendChild(errorMsg);
-        setTimeout(() => errorMsg.remove(), 5000);
-      })
-      .finally(() => {
-          submitButton.disabled = false;
-          submitButton.textContent = '💾 Guardar Cambios';
-      });
-    });
+                // Mostrar mensaje de éxito
+                const confirm = document.createElement('div');
+                confirm.className = 'confirm';
+                confirm.textContent = "✅ Excursión actualizada correctamente";
+                form.appendChild(confirm);
+                setTimeout(() => confirm.remove(), 3000);
+            })
+            .catch(err => {
+                console.error("Error al actualizar:", err);
+                // Reemplazo de alert() con un mensaje en el DOM
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'error-msg';
+                errorMsg.textContent = "❌ Error al guardar los cambios. Verifique la consola.";
+                form.appendChild(errorMsg);
+                setTimeout(() => errorMsg.remove(), 5000);
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = '💾 Guardar Cambios';
+            });
+        });
+    })();
   </script>
-</body>
-</html>
-  <option disabled selected>Selecciona una excursión</option>
-</select>
-
-  <form id="edit-form">
-    <input type="hidden" name="rowIndex" id="rowIndex">
-    <label>Nombre:<input type="text" name="name" id="name" required></label>
-    <label>Descripción:<textarea name="description" id="description" required></textarea></label>
-    <label>Categoría:
-  <select name="category" id="category" required>
-    <option value="barco">Barco</option>
-    <option value="buggy">Buggy</option>
-    <option value="excursiones">Excursiones</option>
-    <option value="jetcor">Jetcor</option>
-    <option value="jetsky">Jetsky</option>
-    <option value="movilite">Movilite</option>
-    <option value="quad">Quad</option>
-    <option value="velero">Velero</option>
-  </select>
-</label>
-    <label>Precio:<input type="number" name="price" id="price" required></label>
-    <label>Precio original:<input type="number" name="originalPrice" id="originalPrice"></label>
-    <label>¿Recomendado?:
-  <select name="recommended" id="recommended">
-    <option value="false">No</option>
-    <option value="true">Sí</option>
-    
-  </select>
-</label>
-    <label>Horario:<input type="text" name="schedule" id="schedule"></label>
-    <label>Actividades:<input type="text" name="activities" id="activities"></label>
-
-    <label>Ubicación (Google Maps):<input type="text" name="location_url" id="location_url"></label>
-
-
-    <button type="submit">Guardar cambios</button>
-  </form>
-
-  
-
-  <script>
-    const API_URL = 'https://script.google.com/macros/s/AKfycbwdU3utUB2HKX9M2eKEsIvAiOG0JgDIGzx7m7Smry5WpfxSaFjBKeNJj7BORHk5Lreh/exec';
-    let excursions = [];
-
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        excursions = data;
-        const selector = document.getElementById('excursion-selector');
-        const cards = document.getElementById('excursion-cards');
-        selector.innerHTML = `
-  <option disabled selected>Selecciona una excursión</option>
-  ${data.map((ex, i) => `<option value="${i}">${ex.name}</option>`).join('')}
-`;
-        cards.innerHTML = data.map(ex => `
-          <div class="card" id="excursion-${ex.rowIndex}">
-            <h3>${ex.name}</h3>
-            <p>${ex.description}</p>
-            <p>Precio: €${ex.price}</p>
-          </div>
-        `).join('');
-      });
-
-    document.getElementById('excursion-selector').addEventListener('change', (e) => {
-      const index = e.target.value;
-      const excursion = excursions[index];
-      document.getElementById('rowIndex').value = excursion.rowIndex;
-      document.getElementById('name').value = excursion.name;
-      document.getElementById('description').value = excursion.description;
-      document.getElementById('category').value = excursion.category || "";
-      document.getElementById('price').value = excursion.price;
-      document.getElementById('originalPrice').value = excursion.originalPrice;
-      document.getElementById('recommended').value = String(excursion.recommended);
-      document.getElementById('schedule').value = excursion.schedule;
-      document.getElementById('activities').value = excursion.activities;
-      document.getElementById('location_url').value = excursion.location_url || "";
-
-    });
-
-    document.getElementById('edit-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const formData = new FormData(e.target);
-      const data = {};
-      formData.forEach((value, key) => data[key] = value);
-
-      fetch(API_URL, {
-        method: 'POST',
-        body: new URLSearchParams(data)
-      })
-      .then(res => res.text())
-      .then(msg => {
-        const card = document.getElementById(`excursion-${data.rowIndex}`);
-        if (card) {
-          card.querySelector('h3').textContent = data.name;
-          card.querySelector('p:nth-of-type(1)').textContent = data.description;
-          card.querySelector('p:nth-of-type(2)').textContent = `Precio: €${data.price}`;
-        }
-
-        const confirm = document.createElement('div');
-        confirm.className = 'confirm';
-        confirm.textContent = "✅ Excursión actualizada correctamente";
-        e.target.appendChild(confirm);
-        setTimeout(() => confirm.remove(), 3000);
-      })
-      .catch(err => {
-        console.error("Error al actualizar:", err);
-        alert("Hubo un error al guardar los cambios.");
-      });
-    });
-  </script>
 </body>
 </html>
