@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chento-Ben | Excursiones & Aventuras</title>
+    
+    <!-- Fuentes de Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Iconos Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- ESTILOS (assets/styles/style.css integrado) -->
+    <style>
+        /* --- Base y Tipografía --- */
+        :root {
+            --color-primary: #1e88e5; /* Azul vibrante */
+            --color-secondary: #ffc107; /* Amarillo para acentos/recomendados */
+            --color-text-dark: #333;
+            --color-text-light: #f4f4f4;
+            --color-background: #f8f8f8;
+            --color-card-bg: #fff;
+            --shadow-light: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-background);
+            color: var(--color-text-dark);
+            line-height: 1.6;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--color-secondary);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* --- Header --- */
+        header {
+            background: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: var(--shadow-light);
+            margin-bottom: 40px;
+        }
+
+        .brand-name {
+            font-family: 'Pacifico', cursive;
+            font-size: 3em;
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* --- Contenedores de Excursiones --- */
+        .excursions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* --- Tarjeta de Excursión (Card) --- */
+        .card {
+            background-color: var(--color-card-bg);
+            border-radius: 12px;
+            box-shadow: var(--shadow-light);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            position: relative; /* Necesario para el badge */
+            opacity: 0; /* Inicialmente oculto para la animación */
+            transform: translateY(20px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--color-secondary);
+            color: var(--color-text-dark);
+            font-weight: 700;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-light);
+            z-index: 10;
+            transform: rotate(3deg);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-content h3 {
+            font-size: 1.5em;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        /* --- Detalles --- */
+        .card-details {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: flex-start;
+            font-size: 0.9em;
+            color: var(--color-text-dark);
+            margin-bottom: 8px;
+        }
+
+        .detail-item i {
+            color: var(--color-primary);
+            margin-right: 10px;
+            font-size: 1.1em;
+            padding-top: 3px;
+        }
+
+        .activities-list {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding-left: 0;
+            margin-top: 3px;
+        }
+
+        .activities-list li {
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 0.8em;
+        }
+
+        .location-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .location-link:hover {
+            color: #0d47a1; /* Azul más oscuro */
+        }
+
+        /* --- Precios y Botón de Reserva --- */
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 2em;
+            font-weight: 700;
+            color: #4caf50; /* Verde para el precio */
+        }
+
+        .original-price {
+            font-size: 1em;
+            color: #ff5252; /* Rojo para el descuento */
+            text-decoration: line-through;
+        }
+
+        .discount-badge {
+            background-color: #ff5252;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .whatsapp-button {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px;
+            background-color: #25d366; /* Verde WhatsApp */
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.2s ease;
+            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.4);
+        }
+
+        .whatsapp-button:hover {
+            background-color: #128c7e;
+        }
+
+        .whatsapp-button i {
+            margin-right: 8px;
+        }
+
+        /* --- Filtros --- */
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .filter-btn {
+            padding: 8px 15px;
+            border: 2px solid var(--color-primary);
+            background-color: white;
+            color: var(--color-primary);
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn:hover {
+            background-color: var(--color-primary);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background-color: var(--color-primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(30, 136, 229, 0.4);
+        }
+
+        /* --- Mensajes de Estado --- */
+        .loading-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 1.2em;
+            color: #999;
+            padding: 50px 0;
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background-color: #333;
+            color: #aaa;
+            margin-top: 50px;
+        }
+
+        .social-media {
+            margin-bottom: 15px;
+        }
+
+        .social-media a {
+            color: white;
+            font-size: 1.5em;
+            margin: 0 10px;
+            transition: color 0.2s ease;
+        }
+
+        .social-media a:hover {
+            color: var(--color-primary);
+        }
+
+        /* --- WhatsApp FAB (Floating Action Button) --- */
+        .whatsapp-fab {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 60px;
+            height: 60px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+
+        .whatsapp-fab:hover {
+            background-color: #128c7e;
+            transform: scale(1.05);
+        }
+
+        /* --- Media Queries para Responsividad --- */
+        @media (max-width: 768px) {
+            .brand-name {
+                font-size: 2.5em;
+            }
+
+            h2 {
+                font-size: 1.7em;
+                text-align: center;
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+
+            .excursions-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-container {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="brand-name">Chento-Ben</h1>
+        <p>Vive la aventura, crea tu historia. ¡Contáctanos y empieza a explorar!</p>
+    </header>
+
+    <main>
+        <section id="recommended-section">
+            <h2>Recomendados para ti</h2>
+            <div id="recommended-container" class="excursions-grid">
+                <p id="loading-recommended" class="loading-message">Cargando...</p>
+            </div>
+        </section>
+
+        <section id="excursions-section">
+            <div class="filter-container" id="filter-container">
+                <!-- Los botones de filtro se insertarán aquí por JavaScript -->
+            </div>
+            <h2>Nuestras Excursiones</h2>
+            <div id="excursions-container" class="excursions-grid">
+                <p id="loading-excursions" class="loading-message">Cargando excursiones...</p>
+                <!-- Las tarjetas de excursiones se insertarán aquí por JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="social-media">
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a href="#" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <p>&copy; 2024 Chento-Ben. Todos los derechos reservados.</p>
+    </footer>
+
+    <a href="https://wa.me/5491112345678" class="whatsapp-fab" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- LÓGICA (assets/js/script.js integrado) -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURACIÓN ---
+            // URL proporcionada por el usuario. Asegúrate de que esta URL sea correcta y esté desplegada.
+            const API_URL = 'https://script.google.com/macros/s/AKfycbxg5LYHhdRN1MSHwhy9exBi8i3qIt-1a_Oi3-1mpK68N7JTKTBd5XDSa190PkBGt4iR/exec; 
+            const WHATSAPP_NUMBER = '5491112345678';
+            
+            // Placeholder de imagen genérica
+            const DEFAULT_IMAGE = "https://placehold.co/800x600/1e88e5/ffffff?text=AVENTURA"; 
+
+            // --- ELEMENTOS DEL DOM ---
+            const excursionsContainer = document.getElementById('excursions-container');
+            const recommendedContainer = document.getElementById('recommended-container');
+            const filterContainer = document.getElementById('filter-container');
+            const loadingExcursions = document.getElementById('loading-excursions');
+            const loadingRecommended = document.getElementById('loading-recommended');
+
+            let excursions = [];
+
+            // --- CARGAR EXCURSIONES DESDE GOOGLE SHEETS API ---
+            const fetchExcursions = async () => {
+                try {
+                    const response = await fetch(API_URL);
+                    if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
+                    
+                    const result = await response.json();
+                    
+                    const rawData = result.data || result; 
+
+                    excursions = rawData.map(item => ({
+                        ...item,
+                        price: parseFloat(item.price) || 0,
+                        originalPrice: parseFloat(item.originalPrice) || null,
+                        recommended: item.recommended === true || String(item.recommended).toLowerCase() === "true",
+                        activities: Array.isArray(item.activities) 
+                            ? item.activities 
+                            : typeof item.activities === "string" 
+                                ? item.activities.split(',').map(a => a.trim()).filter(a => a.length > 0)
+                                : [],
+                        // Usa location_url o localizacion si es una URL válida, si no usa '#'
+                        location_url: item.location_url && String(item.location_url).startsWith('http') ? item.location_url : (item.localizacion && String(item.localizacion).startsWith('http') ? item.localizacion : '#'),
+                        image: item.image || DEFAULT_IMAGE 
+                    }));
+                    
+                    renderCards();
+                    setupFilters();
+
+                } catch (error) {
+                    console.error("Error al cargar excursiones:", error);
+                    excursionsContainer.innerHTML = '<p class="loading-message" style="color:#d32f2f;">¡Ups! No se pudieron cargar las excursiones. Revisa la consola para más detalles.</p>';
+                    recommendedContainer.innerHTML = '';
+                } finally {
+                    if (loadingExcursions) loadingExcursions.remove();
+                    if (loadingRecommended) loadingRecommended.remove();
+                }
+            };
+
+            // --- CREAR TARJETA HTML ---
+            const createCard = (excursion) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.dataset.category = excursion.category;
+
+                const message = `Hola! Quiero reservar la excursión "${excursion.name}". ¿Podrían darme más información?`;
+                const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+
+                let priceHTML = '';
+                const hasDiscount = excursion.originalPrice && excursion.originalPrice > excursion.price;
+                const discount = hasDiscount ? Math.round(((excursion.originalPrice - excursion.price) / excursion.originalPrice) * 100) : 0;
+                
+                const priceDisplay = (price) => `€${price.toFixed(2)}`; 
+
+                if (hasDiscount) {
+                    priceHTML = `
+                        <div class="price-container">
+                            <span class="current-price">${priceDisplay(excursion.price)}</span>
+                            <span class="original-price">${priceDisplay(excursion.originalPrice)}</span>
+                            <span class="discount-badge">${discount}% OFF</span>
+                        </div>
+                    `;
+                } else {
+                    priceHTML = `
+                        <div class="price-container">
+                            <span class="current-price">${priceDisplay(excursion.price)}</span>
+                        </div>
+                    `;
+                }
+                
+                const locationLink = excursion.location_url && excursion.location_url.startsWith('http') ? excursion.location_url : '#';
+                const locationTarget = locationLink !== '#' ? '_blank' : '_self';
+                const locationClass = locationLink !== '#' ? 'location-link' : 'location-link disabled';
+
+                card.innerHTML = `
+                    ${excursion.recommended ? '<div class="card-badge">Recomendado</div>' : ''}
+                    <img src="${excursion.image}" alt="${excursion.name}" class="card-img" onerror="this.onerror=null; this.src='${DEFAULT_IMAGE}'"> 
+                    <div class="card-content">
+                        <h3>${excursion.name}</h3>
+                        <p>${excursion.description}</p>
+                        <div class="card-details">
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>${excursion.schedule || 'Consultar horario'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-tasks"></i>
+                                <ul class="activities-list">
+                                    ${excursion.activities.map(activity => `<li>${activity}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div class="detail-item">
+                                <a href="${locationLink}" target="${locationTarget}" rel="noopener noreferrer" class="${locationClass}">
+                                    <i class="fas fa-route"></i> Cómo llegar
+                                </a>
+                            </div>
+                        </div>
+                        ${priceHTML}
+                        <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer" class="whatsapp-button">
+                            <i class="fab fa-whatsapp"></i> Reservar por WhatsApp
+                        </a>
+                    </div>
+                `;
+                return card;
+            };
+
+            // --- RENDERIZAR TARJETAS EN SECCIONES ---
+            const renderCards = () => {
+                excursionsContainer.innerHTML = '';
+                recommendedContainer.innerHTML = '';
+
+                const recommendedExcursions = excursions.filter(ex => ex.recommended);
+
+                if (excursions.length === 0) {
+                    excursionsContainer.innerHTML = '<p class="loading-message">No se encontraron excursiones disponibles.</p>';
+                } else {
+                    excursions.forEach(excursion => {
+                        const card = createCard(excursion);
+                        excursionsContainer.appendChild(card);
+                    });
+                }
+                
+                if (recommendedExcursions.length === 0) {
+                    recommendedContainer.innerHTML = '<p class="loading-message">No hay excursiones destacadas por el momento.</p>';
+                } else {
+                    recommendedExcursions.forEach(excursion => {
+                        const recommendedCard = createCard(excursion);
+                        recommendedContainer.appendChild(recommendedCard);
+                    });
+                }
+                
+                // --- Animación de scroll para cards ---
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                const allCards = document.querySelectorAll('.card');
+                allCards.forEach(card => observer.observe(card));
+            };
+
+            // --- FILTROS POR CATEGORÍA ---
+            const setupFilters = () => {
+                const categories = ['Todos', ...new Set(excursions.map(ex => ex.category).filter(c => c && c.length > 0))];
+                
+                filterContainer.innerHTML = categories.map(category =>
+                    `<button class="filter-btn ${category === 'Todos' ? 'active' : ''}" data-filter="${category}">${category}</button>`
+                ).join('');
+
+                filterContainer.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('filter-btn')) {
+                        const filter = e.target.dataset.filter;
+
+                        filterContainer.querySelector('.filter-btn.active')?.classList.remove('active');
+                        e.target.classList.add('active');
+
+                        const cards = excursionsContainer.querySelectorAll('.card');
+                        cards.forEach(card => {
+                            card.style.display = (filter === 'Todos' || card.dataset.category === filter) ? 'flex' : 'none';
+                        });
+                    }
+                });
+            };
+
+            // Iniciar la carga de datos al terminar la carga del DOM
+            fetchExcursions();
+        });
+    </script>
+</body>
+</html>
