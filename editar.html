@@ -6,17 +6,18 @@
     <title>Gestor de Excursiones (Edición API Script)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Variables y Estilos Generales */
+        /* Variables y Estilos Generales (PALETA MEJORADA) */
         :root {
-            --primary-color: #3498db; /* Azul vibrante */
-            --primary-dark: #2980b9;
-            --success-color: #2ecc71; /* Verde éxito */
-            --error-color: #e74c3c; /* Rojo error */
-            --text-dark: #333;
-            --background-light: #f4f7f9;
+            --primary-color: #1abc9c; /* 🟢 Verde Esmeralda Vibrante (Teal) */
+            --primary-dark: #16a085; /* Verde Esmeralda Oscuro */
+            --primary-light: #e8f8f5; /* Fondo ligero para inputs/mensajes */
+            --success-color: #27ae60; /* Verde Éxito Profundo */
+            --error-color: #c0392b; /* Rojo Error Oscuro */
+            --text-dark: #2c3e50; /* Gris Oscuro Pizarrón */
+            --background-light: #ecf0f1; /* Fondo muy claro y suave */
             --card-background: #ffffff;
-            --shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-            --border-radius: 10px;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08); /* Sombra más suave */
+            --border-radius: 12px; /* Radio más redondeado */
         }
 
         * {
@@ -38,10 +39,12 @@
             font-size: 2em;
             color: var(--primary-dark);
             margin-bottom: 25px;
+            /* Usar un color más suave para la línea divisoria del título principal */
             border-bottom: 3px solid var(--primary-color);
             padding-bottom: 5px;
             width: 100%;
             text-align: center;
+            font-weight: 800; /* Mayor peso para títulos */
         }
 
         /* Contenedor Principal */
@@ -69,19 +72,21 @@
         
         #excursion-selector {
             width: 100%;
-            padding: 12px 40px 12px 15px; /* Añadir espacio para la flecha */
+            padding: 12px 40px 12px 15px;
             border: 2px solid var(--primary-color);
             border-radius: var(--border-radius);
             font-size: 1em;
-            appearance: none; /* Eliminar la flecha nativa */
-            background-color: #fff;
+            appearance: none;
+            background-color: var(--primary-light); /* Usar color ligero para el selector */
             cursor: pointer;
-            transition: border-color 0.3s;
-            margin-bottom: 0; /* Lo gestiona el wrapper */
+            transition: border-color 0.3s, box-shadow 0.3s;
+            margin-bottom: 0;
+            color: var(--text-dark); /* Color del texto */
         }
         #excursion-selector:focus {
             outline: none;
             border-color: var(--primary-dark);
+            box-shadow: 0 0 0 4px rgba(26, 188, 156, 0.2);
         }
 
         /* Flecha personalizada para el selector */
@@ -103,7 +108,7 @@
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             padding: 20px 0;
-            border-top: 1px dashed #ccc;
+            border-top: 1px solid #dcdcdc; /* Línea menos discontinua y más clara */
             margin-top: 20px;
         }
 
@@ -113,7 +118,7 @@
             font-weight: 600;
             font-size: 0.95em;
             color: var(--text-dark);
-            text-align: left; /* Asegurar alineación izquierda en la cuadrícula */
+            text-align: left;
         }
 
         input[type="text"],
@@ -121,35 +126,36 @@
         input[type="password"],
         textarea,
         select {
-            padding: 10px 12px;
+            padding: 12px; /* Un poco más de padding */
             margin-top: 5px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            border: 1px solid #ccc; /* Borde más suave */
+            border-radius: 8px; /* Radio ligeramente más pequeño para inputs */
             font-size: 1em;
             transition: border-color 0.3s, box-shadow 0.3s;
-            background-color: var(--background-light);
+            background-color: var(--card-background); /* Inputs blancos para contraste */
+            color: var(--text-dark);
         }
 
         input:focus,
         textarea:focus,
         select:focus {
             border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.2); /* Sombra con el nuevo color */
             outline: none;
             background-color: var(--card-background);
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 120px; /* Un poco más de altura */
         }
 
         /* Botones */
         #edit-form button[type="submit"],
         #login-form button[type="submit"] {
             grid-column: 1 / -1; 
-            padding: 15px 20px;
-            background-color: var(--success-color);
+            padding: 16px 20px; /* Mayor padding vertical */
+            background-color: var(--primary-color); /* Usar color primario para el botón principal (login y guardar) */
             color: white;
             border: none;
             border-radius: var(--border-radius);
@@ -157,27 +163,21 @@
             font-weight: 700;
             font-size: 1.1em;
             transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
-            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(26, 188, 156, 0.3); /* Sombra del nuevo color primario */
+            margin-top: 15px;
         }
 
         #edit-form button[type="submit"]:hover,
         #login-form button[type="submit"]:hover {
-            background-color: #27ae60;
+            background-color: var(--primary-dark);
             transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 8px 15px rgba(26, 188, 156, 0.4);
         }
         
-        /* Botón de login con color primario */
-        #login-form button[type="submit"] {
-            background-color: var(--primary-color);
-            box-shadow: 0 4px 6px rgba(52, 152, 219, 0.3);
-        }
-        #login-form button[type="submit"]:hover {
-            background-color: var(--primary-dark);
-            box-shadow: 0 6px 10px rgba(52, 152, 219, 0.4);
-        }
-
+        /* Opcional: Si el botón de guardar debe ser un color de éxito diferente, usar la línea de abajo */
+        /* #edit-form button[type="submit"] { background-color: var(--success-color); box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3); } */
+        /* #edit-form button[type="submit"]:hover { background-color: #2ecc71; box-shadow: 0 8px 15px rgba(39, 174, 96, 0.4); } */
+        
         /* Mensajes de Confirmación/Error */
         .confirm, .error-msg {
             grid-column: 1 / -1;
@@ -189,12 +189,12 @@
             transition: opacity 0.3s;
         }
         .confirm {
-            background-color: #e8f9f1;
+            background-color: #e6f7ee; /* Fondo muy claro de éxito */
             color: var(--success-color);
             border: 1px solid var(--success-color);
         }
         .error-msg {
-            background-color: #fcebeb;
+            background-color: #fcecec; /* Fondo muy claro de error */
             color: var(--error-color);
             border: 1px solid var(--error-color);
         }
@@ -217,72 +217,78 @@
         #excursion-cards {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            gap: 25px; /* Más espacio entre tarjetas */
+            margin-top: 25px;
         }
 
         .card {
-            padding: 20px;
+            padding: 25px; /* Más padding en la tarjeta */
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             transition: transform 0.3s, box-shadow 0.3s;
-            border-left: 5px solid var(--primary-color);
-            background-color: #fff;
+            border-left: 6px solid var(--primary-color); /* Borde más grueso */
+            background-color: var(--card-background);
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-7px); /* Efecto más pronunciado */
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
         }
         
         .card h3 {
             color: var(--primary-dark);
             margin-top: 0;
-            font-size: 1.4em;
-            margin-bottom: 5px;
+            font-size: 1.5em; /* Título un poco más grande */
+            margin-bottom: 8px;
+            font-weight: 800;
         }
         
-        /* --- ESTILOS DE VISTA RÁPIDA (NUEVOS) --- */
+        /* --- ESTILOS DE VISTA RÁPIDA --- */
         .price-info {
             display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 0 5px;
+            align-items: flex-end; /* Alinear los textos en la base */
+            gap: 12px;
+            margin: 10px 0 8px;
+            flex-wrap: wrap; /* Añadido para mejor manejo de precios */
         }
 
         .current-price {
-            font-size: 1.2em;
+            font-size: 1.5em; /* Precio actual más destacado */
             font-weight: 800;
-            color: var(--success-color); /* Color para el precio actual */
+            color: var(--success-color);
         }
 
         .original-price {
-            color: #999;
+            color: #95a5a6; /* Gris más suave */
             text-decoration: line-through;
-            font-size: 0.9em;
-            white-space: nowrap; /* Evita que el precio tachado se rompa */
-        }
-
-        .discount-badge {
-            background-color: var(--error-color); /* Rojo para el descuento */
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.8em;
+            font-size: 1em; /* Un poco más grande para mejor lectura */
             white-space: nowrap;
         }
 
+        .discount-badge {
+            background-color: var(--error-color); 
+            color: white;
+            padding: 4px 10px; /* Mayor padding en el badge */
+            border-radius: 20px; /* Más redondeado (pastilla) */
+            font-weight: 700;
+            font-size: 0.85em;
+            white-space: nowrap;
+            letter-spacing: 0.5px;
+        }
+
         .schedule-time {
-            margin: 5px 0;
+            margin: 5px 0 15px;
             padding-bottom: 5px;
-            border-bottom: 1px dashed #eee;
-            color: var(--primary-dark);
+            border-bottom: 1px dashed #e0e0e0;
+            color: var(--text-dark);
             font-weight: 600;
             font-size: 0.9em;
         }
-        /* Fin de estilos nuevos */
-        
+
+        .card p {
+            line-height: 1.6; /* Mayor interlineado para la descripción */
+        }
+
         /* Adaptación móvil */
         @media (max-width: 600px) {
             body {
@@ -291,18 +297,23 @@
             .container, .cards-section {
                 padding: 20px;
             }
+            h2 {
+                font-size: 1.6em;
+            }
             #edit-form {
                 grid-template-columns: 1fr;
             }
             .price-info {
-                flex-wrap: wrap; /* Asegura que no se desborden en móvil */
+                flex-wrap: wrap;
+            }
+            .current-price {
+                font-size: 1.3em;
             }
         }
     </style>
 </head>
 <body>
     
-    <!-- Access Gate Container (Visible inicialmente) -->
     <div id="access-gate" class="container" style="max-width: 500px; margin-top: 100px;">
         <h2>🔐 Acceso Restringido</h2>
         <p style="text-align: center; margin-bottom: 20px;">Introduce el token de seguridad para acceder al gestor de excursiones.</p>
@@ -315,7 +326,6 @@
         </form>
     </div>
 
-    <!-- Main Content (Oculto inicialmente) -->
     <div id="main-content" style="display: none; width: 100%; display: flex; flex-direction: column; align-items: center;">
         <div class="container">
             <h2>✏️ Editar Excursión Existente</h2>
@@ -383,12 +393,10 @@
             </form>
         </div>
 
-        <!-- Sección de Previsualización -->
         <div class="cards-section">
             <h2>Vista Rápida de Excursiones</h2>
             <div id="excursion-cards">
-                <!-- Las tarjetas se cargarán aquí -->
-            </div>
+                </div>
         </div>
     </div>
  
@@ -490,10 +498,11 @@
                 if (originalPrice > price && originalPrice > 0) {
                     const discount = Math.round(((originalPrice - price) / originalPrice) * 100);
                     discountHtml = `<span class="discount-badge">-${discount}%</span>`;
-                    originalPriceHtml = `<span class="original-price">Original: €${originalPrice.toFixed(2)}</span>`;
+                    currentPriceDisplay = `€${price.toFixed(2)}`; // Mostrar solo el precio actual
+                    originalPriceHtml = `<span class="original-price">€${originalPrice.toFixed(2)}</span>`;
                 } else {
-                    // Si no hay descuento, mostramos el precio actual como texto simple.
-                    currentPriceDisplay = `Precio: €${price.toFixed(2)}`;
+                    // Si no hay descuento, mostramos el precio actual sin prefijo
+                    currentPriceDisplay = `€${price.toFixed(2)}`;
                 }
                 
                 const description = ex.description || 'Sin descripción.';
@@ -505,7 +514,7 @@
                         
                         <div class="price-info">
                             ${originalPriceHtml}
-                            <span class="current-price">${originalPriceHtml ? 'Ahora:' : ''} ${currentPriceDisplay}</span>
+                            <span class="current-price">${currentPriceDisplay}</span>
                             ${discountHtml}
                         </div>
 
